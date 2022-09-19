@@ -18,9 +18,10 @@ public class JoinCheck implements Listener {
         Player player = event.getPlayer();
         String name = player.getName();
         Plugin p = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
-        if(p.getConfig().getString(name) != null && p.getConfig().getInt(name) == 1 && player.hasPermission("survivalutil.apply")){
+        if(p.getConfig().getString(name) != null && p.getConfig().getInt(name) == 1 && player.hasPermission("group.default")){
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + name + " parent remove default");
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + name + " parent add player");
+            player.getInventory().clear();
             p.getConfig().set(name, null);
             p.saveConfig();
         }

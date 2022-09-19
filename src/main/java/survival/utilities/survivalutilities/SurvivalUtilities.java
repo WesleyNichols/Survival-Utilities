@@ -10,6 +10,7 @@ public final class SurvivalUtilities extends JavaPlugin{
         saveDefaultConfig();
         registerCommands();
         getServer().getPluginManager().registerEvents(new JoinCheck(this), this);
+        getServer().getPluginManager().registerEvents(new DenyInteract(this), this);
     }
 
     @Override

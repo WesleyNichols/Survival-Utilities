@@ -20,9 +20,10 @@ public class AcceptCommand implements CommandExecutor{
             Player p = Bukkit.getPlayer(args[0]);
 
             if (p != null) {
-                if (p.hasPermission("survivalutil.apply")) {
+                if (p.hasPermission("group.default")) {
                     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove default");
                     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent add player");
+                    p.getInventory().clear();
                     sender.sendMessage(ChatColor.GREEN + args[0] + " was accepted into the server.");
                 }
             } else {
