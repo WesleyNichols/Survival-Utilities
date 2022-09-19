@@ -1,5 +1,11 @@
 package survival.utilities.survivalutilities;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -10,9 +16,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+
 
 public class ApplicationBook implements CommandExecutor {
+    private static final String form = "https://forms.gle/q1oyyqkPhz9d12YZ7";
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (label.equalsIgnoreCase("apply")) {
@@ -22,10 +31,28 @@ public class ApplicationBook implements CommandExecutor {
                 bookmeta.setTitle("Application");
                 bookmeta.setAuthor("Survival");
 
-                ArrayList<String> pages = new ArrayList<String>();
+                ArrayList<Component> pages = new ArrayList<Component>();
 
-                pages.add(ChatColor.DARK_GREEN + "This is a test\n" + ChatColor.LIGHT_PURPLE + "123 testing");
-                bookmeta.setPages(pages);
+                TextComponent textComponent = Component.text("   Apply to Join\n")
+                        .color(NamedTextColor.DARK_PURPLE)
+                        .decoration(TextDecoration.BOLD, true)
+                        .append(
+                                Component.text(" ✧  ✦  ✧  ✪  ✧  ✦  ✧\n\n")
+                                        .color(NamedTextColor.LIGHT_PURPLE)
+                                        .decoration(TextDecoration.BOLD, false)
+                        .append(
+                                Component.text("Staff will review your application as soon as possible - once approved you're ready to play!\n\n")
+                                        .color(NamedTextColor.BLACK)
+                                        .decoration(TextDecoration.BOLD, false))
+                        .append(
+                                Component.text("  [Click to Apply]")
+                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form))
+                                        .color(NamedTextColor.BLUE)
+                                        .decoration(TextDecoration.BOLD, true)
+                        ));
+
+                //pages.add(Component.text("Apply to Join").color(NamedTextColor.GOLD).decoration(TextDecoration.BOLD, true));
+                bookmeta.addPages(textComponent);
 
                 book.setItemMeta(bookmeta);
 
