@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -86,6 +87,16 @@ public class DenyInteract implements Listener {
     public void preventDamage(EntityDamageByEntityEvent event) {
         if(event.getDamager().getType() == EntityType.PLAYER){
             Player player = ((Player) event.getDamager()).getPlayer();
+            if(player.hasPermission("group.default")) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onFoodChange(FoodLevelChangeEvent event) {
+        if(event.getEntityType() == EntityType.PLAYER){
+            Player player = ((Player) event.getEntity()).getPlayer();
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
