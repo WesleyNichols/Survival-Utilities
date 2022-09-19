@@ -1,5 +1,6 @@
 package survival.utilities.survivalutilities;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -24,16 +25,16 @@ public class DenyInteract implements Listener {
         Player player = event.getPlayer();
         if(player.hasPermission("group.default")) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "You are not allowed to do this action! Please apply using the /apply command.");
+            player.sendActionBar(Component.text(ChatColor.RED + "Use /apply to get started!"));
         }
     }
 
     @EventHandler
-    public void onBreak(BlockBreakEvent event) {
+    public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if(player.hasPermission("group.default")) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "You are not allowed to do this action! Please apply using the /apply command.");
+            player.sendActionBar(Component.text(ChatColor.RED + "Use /apply to get started!"));
         }
     }
 
@@ -42,7 +43,16 @@ public class DenyInteract implements Listener {
         Player player = event.getPlayer();
         if(player.hasPermission("group.default")) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "You are not allowed to do this action! Please apply using the /apply command.");
+            player.sendActionBar(Component.text(ChatColor.RED + "Use /apply to get started!"));
+        }
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        if(player.hasPermission("group.default")) {
+            event.setCancelled(true);
+            player.sendActionBar(Component.text(ChatColor.RED + "Use /apply to get started!"));
         }
     }
 
@@ -53,15 +63,6 @@ public class DenyInteract implements Listener {
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
-        }
-    }
-
-    @EventHandler
-    public void onDrop(PlayerDropItemEvent event) {
-        Player player = event.getPlayer();
-        if(player.hasPermission("group.default")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "You are not allowed to do this action! Please apply using the /apply command.");
         }
     }
 

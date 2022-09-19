@@ -16,13 +16,17 @@ public class AcceptCommand implements CommandExecutor{
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
         Player player = (Player) sender;
-        if (player.hasPermission("survivalutil.accept") && command.getName().equalsIgnoreCase("accept") && args.length == 1) {
+        if (player.hasPermission("survivalutil.accept") && command.getName().equalsIgnoreCase("accept")) {
+            if (!(args.length == 1)) {
+                return false;
+            }
+
             Player p = Bukkit.getPlayer(args[0]);
 
             if (p != null) {
                 if (p.hasPermission("group.default")) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove default");
                     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent add player");
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove default");
                     p.getInventory().clear();
                     sender.sendMessage(ChatColor.GREEN + args[0] + " was accepted into the server.");
                 }
@@ -38,12 +42,16 @@ public class AcceptCommand implements CommandExecutor{
             return true;
         }
 
-        if(player.hasPermission("survivalutil.unaccept") && command.getName().equalsIgnoreCase("unaccept") && args.length == 1) {
+        if(player.hasPermission("survivalutil.unaccept") && command.getName().equalsIgnoreCase("unaccept")) {
+            if (!(args.length == 1)) {
+                return false;
+            }
+
             OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
 
             if(p.hasPlayedBefore()) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove player");
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent add default");
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove player");
                 sender.sendMessage(ChatColor.GREEN + args[0] + " was unaccepted from the server.");
             } else {
                 if (!plugin.getConfig().contains(args[0])) {
