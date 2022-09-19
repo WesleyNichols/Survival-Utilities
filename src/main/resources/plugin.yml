@@ -10,6 +10,10 @@ commands:
     usage: /apply
     permission: survivalutil.apply
   accept:
-      description: Used to apply to join
+      description: Accept a user as a member
       usage: /accept <player>
       permission: survivalutil.accept
+  unaccept:
+      description: Undo acceptance of a user as a member
+      usage: /unaccept <player>
+      permission: survivalutil.unaccept
