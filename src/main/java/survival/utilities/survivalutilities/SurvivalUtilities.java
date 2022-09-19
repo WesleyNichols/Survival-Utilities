@@ -8,6 +8,7 @@ public final class SurvivalUtilities extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         System.out.println("Enabling Survival Utilities");
+        this.getCommand("apply").setExecutor(new ApplicationBook());
     }
 
     @Override

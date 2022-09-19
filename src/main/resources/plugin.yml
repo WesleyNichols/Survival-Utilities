@@ -1,6 +1,11 @@
-name: Survival Utilities
+name: SurvivalUtilities
 version: '${project.version}'
 main: survival.utilities.survivalutilities.SurvivalUtilities
 api-version: 1.19
 authors: [ wmn ]
 description: Custom additions for survival server
+commands:
+  apply:
+    description: Used to apply to join
+    usage: /<command>
+    permission: survivalutil.apply
