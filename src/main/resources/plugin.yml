@@ -7,5 +7,9 @@ description: Custom additions for survival server
 commands:
   apply:
     description: Used to apply to join
-    usage: /<command>
+    usage: /apply
     permission: survivalutil.apply
+  accept:
+      description: Used to apply to join
+      usage: /accept <player>
+      permission: survivalutil.accept
