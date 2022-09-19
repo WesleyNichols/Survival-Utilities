@@ -1,0 +1,6 @@
+name: Survival Utilities
+version: '${project.version}'
+main: survival.utilities.survivalutilities.SurvivalUtilities
+api-version: 1.19
+authors: [ wmn ]
+description: Custom additions for survival server
