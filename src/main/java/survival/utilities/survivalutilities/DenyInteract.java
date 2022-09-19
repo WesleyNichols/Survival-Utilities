@@ -12,9 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 
 public class DenyInteract implements Listener {
     public DenyInteract(SurvivalUtilities e) {
@@ -101,6 +99,14 @@ public class DenyInteract implements Listener {
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPickupArrow(PlayerPickupItemEvent event) {
+        Player player = event.getPlayer();
+        if(player.hasPermission("group.default")) {
+            event.setCancelled(true);
         }
     }
 }
