@@ -104,7 +104,7 @@ public class DenyInteract implements Listener {
     }
 
     @EventHandler
-    public void onPickupArrow(PlayerPickupItemEvent event) {
+    public void onPickupArrow(PlayerPickupArrowEvent event) {
         Player player = event.getPlayer();
         if(player.hasPermission("group.default")) {
             event.setCancelled(true);
