@@ -31,7 +31,9 @@ public class AcceptCommand implements CommandExecutor{
         UUID uuid = user.getUniqueId();
 
         if (player.hasPermission("survivalutil.accept")) {
-            if (api.getUUIDOfUsername(user.getName()) == null) {
+            try {
+                api.getUUIDOfUsername(user.getName());
+            } catch (Exception e) {
                 sender.sendMessage(ChatColor.RED + user.getName() + " is not a valid user!");
                 return true;
             }
