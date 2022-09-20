@@ -8,13 +8,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.shanerx.mojang.Mojang;
+import survival.utilities.survivalutilities.config.CustomConfig;
 
-import java.io.File;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,8 +27,7 @@ public class AcceptCommand implements CommandExecutor{
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
         assert plugin != null;
 
-        File configFile = new File(plugin.getDataFolder(), "player.yml");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        FileConfiguration config = CustomConfig.get();
 
         if (!(args.length == 1)) { return false; }
 
@@ -65,11 +63,7 @@ public class AcceptCommand implements CommandExecutor{
                     config.set(uuid.toString(), 0);
                 }
 
-                try {
-                    config.save(configFile);
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
+                CustomConfig.save();
 
                 return true;
 
@@ -89,11 +83,7 @@ public class AcceptCommand implements CommandExecutor{
 
                 config.set(uuid.toString(), null);
 
-                try {
-                    config.save(configFile);
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
+                CustomConfig.save();
 
                 return true;
             }
