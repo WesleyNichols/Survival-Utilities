@@ -7,11 +7,14 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.shanerx.mojang.Mojang;
 
+import java.io.File;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,6 +26,7 @@ public class AcceptCommand implements CommandExecutor{
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new File("players.yml"));
         assert plugin != null;
 
         if (!(args.length == 1)) { return false; }
@@ -39,7 +43,7 @@ public class AcceptCommand implements CommandExecutor{
             }
 
             if (command.getName().equalsIgnoreCase("accept")) {
-                if (plugin.getConfig().contains(uuid.toString())) {
+                if (config.contains(uuid.toString())) {
                     sender.sendMessage(ChatColor.RED + user.getName() + " is already accepted!");
                     return true;
                 }
@@ -53,16 +57,16 @@ public class AcceptCommand implements CommandExecutor{
                     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + user.getName() + " parent add player");
                     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + user.getName() + " parent remove default");
                     sender.sendMessage(ChatColor.GOLD + "You accepted " + ChatColor.YELLOW + user.getName() + ChatColor.GOLD + " to the server!");
-                    plugin.getConfig().set(uuid.toString(), 1);
+                    config.set(uuid.toString(), 1);
                 } else {
                     sender.sendMessage(ChatColor.RED + user.getName() + " will be accepted the next time they join.");
-                    plugin.getConfig().set(uuid.toString(), 0);
+                    config.set(uuid.toString(), 0);
                 }
-                plugin.saveConfig();
+                plugin.saveResource("player.yml", true);
                 return true;
 
             } else if (command.getName().equalsIgnoreCase("unaccept")) {
-                if (!plugin.getConfig().contains(uuid.toString())) {
+                if (!config.contains(uuid.toString())) {
                     sender.sendMessage(ChatColor.RED + user.getName() + " is not currently accepted!");
                     return true;
                 }
@@ -75,8 +79,8 @@ public class AcceptCommand implements CommandExecutor{
                     sender.sendMessage(ChatColor.RED + user.getName() + " will no longer be accepted the next time they join.");
                 }
 
-                plugin.getConfig().set(uuid.toString(), null);
-                plugin.saveConfig();
+                config.set(uuid.toString(), null);
+                plugin.saveResource("player.yml", true);
                 return true;
             }
         }
