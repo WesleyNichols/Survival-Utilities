@@ -1,6 +1,9 @@
 package survival.utilities.survivalutilities;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.shanerx.mojang.Mojang;
+
+import java.util.UUID;
 
 public final class SurvivalUtilities extends JavaPlugin{
 

@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.util.UUID;
+
 public class JoinCheck implements Listener {
     public JoinCheck(SurvivalUtilities e) {
     }
@@ -16,7 +18,7 @@ public class JoinCheck implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        String name = player.getName();
+        UUID uuid = player.getUniqueId();
         Plugin p = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
 
         if (player.hasPlayedBefore()) {
@@ -31,12 +33,15 @@ public class JoinCheck implements Listener {
             }, 100);
         }
 
-        if(p.getConfig().getString(name) != null && p.getConfig().getInt(name) == 1 && player.hasPermission("group.default")){
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + name + " parent add player");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + name + " parent remove default");
-            Bukkit.broadcast(Component.text(p.getName() + " is now a member!").color(NamedTextColor.GRAY));
+        if(p.getConfig().getString(uuid.toString()) != null && p.getConfig().getInt(uuid.toString()) == 0 && player.hasPermission("group.default")){
             player.getInventory().clear();
-            p.getConfig().set(name, null);
+
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent add player");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent remove default");
+
+            Bukkit.getScheduler().runTaskLater(p, () -> { Bukkit.broadcast(Component.text(ChatColor.GREEN + player.getName() + " was accepted as a member!")); }, 60);
+
+            p.getConfig().set(player.getUniqueId().toString(), 1);
             p.saveConfig();
         }
     }
