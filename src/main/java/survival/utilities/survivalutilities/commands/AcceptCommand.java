@@ -26,8 +26,10 @@ public class AcceptCommand implements CommandExecutor{
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File("players.yml"));
         assert plugin != null;
+
+        File configFile = new File(plugin.getDataFolder(), "player.yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         if (!(args.length == 1)) { return false; }
 
@@ -62,7 +64,13 @@ public class AcceptCommand implements CommandExecutor{
                     sender.sendMessage(ChatColor.RED + user.getName() + " will be accepted the next time they join.");
                     config.set(uuid.toString(), 0);
                 }
-                plugin.saveResource("player.yml", true);
+
+                try {
+                    config.save(configFile);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 return true;
 
             } else if (command.getName().equalsIgnoreCase("unaccept")) {
@@ -80,7 +88,13 @@ public class AcceptCommand implements CommandExecutor{
                 }
 
                 config.set(uuid.toString(), null);
-                plugin.saveResource("player.yml", true);
+
+                try {
+                    config.save(configFile);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 return true;
             }
         }

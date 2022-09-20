@@ -23,7 +23,9 @@ public class OnPlayerJoin implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         Plugin p = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File("players.yml"));
+        assert p != null;
+        File configFile = new File(p.getDataFolder(), "player.yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         if (player.hasPlayedBefore()) {
             Bukkit.getScheduler().runTaskLater(p, () -> {
@@ -46,7 +48,11 @@ public class OnPlayerJoin implements Listener {
             Bukkit.getScheduler().runTaskLater(p, () -> { Bukkit.broadcast(Component.text(ChatColor.GREEN + player.getName() + " was accepted as a member!")); }, 60);
 
             config.set(player.getUniqueId().toString(), 1);
-            p.saveResource("player.yml", true);
+            try {
+                config.save(configFile);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
