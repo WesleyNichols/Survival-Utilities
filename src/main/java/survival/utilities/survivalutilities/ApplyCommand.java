@@ -27,7 +27,7 @@ public class ApplyCommand implements CommandExecutor {
                 bookmeta.setAuthor("");
                 bookmeta.setTitle("");
 
-                TextComponent textComponent = Component.text("   Apply to Join\n\n")
+                TextComponent textComponent = Component.text("\n   Apply to Join\n\n")
                         .color(NamedTextColor.BLACK)
                         .decoration(TextDecoration.BOLD, true)
                         .append(
