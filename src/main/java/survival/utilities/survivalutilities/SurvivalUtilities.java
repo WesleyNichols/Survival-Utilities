@@ -13,6 +13,7 @@ public final class SurvivalUtilities extends JavaPlugin{
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
+        saveResource("player.yml", true);
         registerCommands();
         getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new DenyInteract(this), this);

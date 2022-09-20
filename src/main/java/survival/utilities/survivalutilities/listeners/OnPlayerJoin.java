@@ -2,6 +2,8 @@ package survival.utilities.survivalutilities.listeners;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import survival.utilities.survivalutilities.SurvivalUtilities;
 
+import java.io.File;
 import java.util.UUID;
 
 public class OnPlayerJoin implements Listener {
@@ -20,6 +23,7 @@ public class OnPlayerJoin implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         Plugin p = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new File("players.yml"));
 
         if (player.hasPlayedBefore()) {
             Bukkit.getScheduler().runTaskLater(p, () -> {
@@ -33,7 +37,7 @@ public class OnPlayerJoin implements Listener {
             }, 100);
         }
 
-        if(p.getConfig().getString(uuid.toString()) != null && p.getConfig().getInt(uuid.toString()) == 0 && player.hasPermission("group.default")){
+        if(config.getString(uuid.toString()) != null && config.getInt(uuid.toString()) == 0 && player.hasPermission("group.default")){
             player.getInventory().clear();
 
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent add player");
@@ -41,8 +45,8 @@ public class OnPlayerJoin implements Listener {
 
             Bukkit.getScheduler().runTaskLater(p, () -> { Bukkit.broadcast(Component.text(ChatColor.GREEN + player.getName() + " was accepted as a member!")); }, 60);
 
-            p.getConfig().set(player.getUniqueId().toString(), 1);
-            p.saveConfig();
+            config.set(player.getUniqueId().toString(), 1);
+            p.saveResource("player.yml", true);
         }
     }
 }
