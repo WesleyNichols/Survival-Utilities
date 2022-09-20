@@ -1,4 +1,4 @@
-package survival.utilities.survivalutilities;
+package survival.utilities.survivalutilities.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;

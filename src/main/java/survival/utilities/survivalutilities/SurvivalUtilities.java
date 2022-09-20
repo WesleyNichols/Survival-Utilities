@@ -1,9 +1,11 @@
 package survival.utilities.survivalutilities;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.shanerx.mojang.Mojang;
-
-import java.util.UUID;
+import survival.utilities.survivalutilities.commands.AcceptCommand;
+import survival.utilities.survivalutilities.commands.ApplyCommand;
+import survival.utilities.survivalutilities.commands.HelpCommand;
+import survival.utilities.survivalutilities.listeners.DenyInteract;
+import survival.utilities.survivalutilities.listeners.OnPlayerJoin;
 
 public final class SurvivalUtilities extends JavaPlugin{
 
@@ -12,7 +14,7 @@ public final class SurvivalUtilities extends JavaPlugin{
         // Plugin startup logic
         saveDefaultConfig();
         registerCommands();
-        getServer().getPluginManager().registerEvents(new JoinCheck(this), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new DenyInteract(this), this);
     }
 
@@ -22,8 +24,9 @@ public final class SurvivalUtilities extends JavaPlugin{
     }
 
     public void registerCommands() {
-        getCommand("apply").setExecutor(new ApplyCommand());
         getCommand("accept").setExecutor(new AcceptCommand());
+        getCommand("apply").setExecutor(new ApplyCommand());
+        getCommand("help").setExecutor(new HelpCommand());
         getCommand("unaccept").setExecutor(new AcceptCommand());
     }
 }

@@ -5,14 +5,18 @@ api-version: 1.19
 authors: [ wmn ]
 description: Custom additions for survival server
 commands:
+  accept:
+    description: Accept as a member
+    usage: /accept <player>
+    permission: survivalutil.accept
   apply:
     description: Apply to join as a member
     usage: /apply
     permission: survivalutil.apply
-  accept:
-      description: Accept as a member
-      usage: /accept <player>
-      permission: survivalutil.accept
+  help:
+    description: Displays help menu
+    usage: /help
+    permission: survivalutil.help
   unaccept:
       description: Undo accept of a member
       usage: /unaccept <player>

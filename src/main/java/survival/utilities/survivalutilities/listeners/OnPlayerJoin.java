@@ -1,18 +1,18 @@
-package survival.utilities.survivalutilities;
+package survival.utilities.survivalutilities.listeners;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
+import survival.utilities.survivalutilities.SurvivalUtilities;
 
 import java.util.UUID;
 
-public class JoinCheck implements Listener {
-    public JoinCheck(SurvivalUtilities e) {
+public class OnPlayerJoin implements Listener {
+    public OnPlayerJoin(SurvivalUtilities e) {
     }
 
     @EventHandler

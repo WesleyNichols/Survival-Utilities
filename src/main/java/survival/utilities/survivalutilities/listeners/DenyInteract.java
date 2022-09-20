@@ -1,4 +1,4 @@
-package survival.utilities.survivalutilities;
+package survival.utilities.survivalutilities.listeners;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.*;
+import survival.utilities.survivalutilities.SurvivalUtilities;
 
 public class DenyInteract implements Listener {
     public DenyInteract(SurvivalUtilities e) {
