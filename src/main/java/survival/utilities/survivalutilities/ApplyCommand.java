@@ -4,9 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,10 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 
-
-public class ApplicationBook implements CommandExecutor {
+public class ApplyCommand implements CommandExecutor {
     private static final String form = "https://forms.gle/q1oyyqkPhz9d12YZ7";
 
     @Override
@@ -28,37 +24,33 @@ public class ApplicationBook implements CommandExecutor {
             if (sender instanceof Player) {
                 ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
                 BookMeta bookmeta = (BookMeta) book.getItemMeta();
-                bookmeta.setTitle("Application");
-                bookmeta.setAuthor("Survival");
+                bookmeta.setAuthor("");
+                bookmeta.setTitle("");
 
-                ArrayList<Component> pages = new ArrayList<Component>();
-
-                TextComponent textComponent = Component.text("   Apply to Join\n")
-                        .color(NamedTextColor.DARK_PURPLE)
+                TextComponent textComponent = Component.text("   Apply to Join\n\n")
+                        .color(NamedTextColor.BLACK)
                         .decoration(TextDecoration.BOLD, true)
                         .append(
                                 Component.text(" ✧  ✦  ✧  ✪  ✧  ✦  ✧\n\n")
-                                        .color(NamedTextColor.LIGHT_PURPLE)
+                                        .color(NamedTextColor.DARK_PURPLE)
                                         .decoration(TextDecoration.BOLD, false)
-                        .append(
-                                Component.text("Staff will review your application as soon as possible - once approved you're ready to play!\n\n")
-                                        .color(NamedTextColor.BLACK)
-                                        .decoration(TextDecoration.BOLD, false))
-                        .append(
-                                Component.text("  [Click to Apply]")
-                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form))
-                                        .color(NamedTextColor.BLUE)
-                                        .decoration(TextDecoration.BOLD, true)
-                        ));
+                                        .append(
+                                                Component.text("Staff will review your application as soon as possible - once approved you're ready to play!\n\n")
+                                                        .color(NamedTextColor.BLACK)
+                                                        .decoration(TextDecoration.BOLD, false))
+                                        .append(
+                                                Component.text("  [Click to Apply]")
+                                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form))
+                                                        .color(NamedTextColor.DARK_AQUA)
+                                                        .decoration(TextDecoration.BOLD, true)
+                                        ));
 
-                //pages.add(Component.text("Apply to Join").color(NamedTextColor.GOLD).decoration(TextDecoration.BOLD, true));
                 bookmeta.addPages(textComponent);
-
                 book.setItemMeta(bookmeta);
 
                 ((Player) sender).openBook(book);
             }
         }
-        return false;
+        return true;
     }
 }

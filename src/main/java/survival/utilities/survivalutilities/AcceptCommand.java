@@ -16,53 +16,49 @@ public class AcceptCommand implements CommandExecutor{
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
         Player player = (Player) sender;
-        if (player.hasPermission("survivalutil.accept") && command.getName().equalsIgnoreCase("accept")) {
+        if (player.hasPermission("survivalutil.accept")) {
             if (!(args.length == 1)) {
                 return false;
             }
 
-            Player p = Bukkit.getPlayer(args[0]);
+            if (command.getName().equalsIgnoreCase("accept")) {
+                Player p = Bukkit.getPlayer(args[0]);
 
-            if (p != null) {
-                if (p.hasPermission("group.default")) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent add player");
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove default");
-                    p.getInventory().clear();
-                    sender.sendMessage(ChatColor.GREEN + args[0] + " was accepted into the server.");
+                if (p != null) {
+                    if (p.hasPermission("group.default")) {
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent add player");
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove default");
+                        p.getInventory().clear();
+                        sender.sendMessage(ChatColor.GREEN + args[0] + " was accepted into the server.");
+                    }
+                } else {
+                    if (plugin.getConfig().contains(args[0])) {
+                        sender.sendMessage(ChatColor.RED + args[0] + " is already accepted!");
+                        return true;
+                    }
+                    plugin.getConfig().set(args[0], 0);
+                    plugin.saveConfig();
+                    sender.sendMessage(ChatColor.RED + args[0] + " will be accepted into the server the next time they join.");
                 }
-            } else {
-                if (plugin.getConfig().contains(args[0])) {
-                    sender.sendMessage(ChatColor.RED + args[0] + " is already accepted!");
-                    return true;
+                return true;
+            } else if (command.getName().equalsIgnoreCase("unaccept")) {
+                OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
+
+                if(p.hasPlayedBefore()) {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent add default");
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove player");
+                    sender.sendMessage(ChatColor.GREEN + args[0] + " was unaccepted from the server.");
+                } else {
+                    if (!plugin.getConfig().contains(args[0])) {
+                        sender.sendMessage(ChatColor.RED + args[0] + " is not currently accepted!");
+                        return true;
+                    }
+                    plugin.getConfig().set(args[0], null);
+                    plugin.saveConfig();
+                    sender.sendMessage(ChatColor.RED + args[0] + " will no longer be accepted the next time they join.");
                 }
-                plugin.getConfig().set(args[0], 0);
-                plugin.saveConfig();
-                sender.sendMessage(ChatColor.RED + args[0] + " will be accepted into the server the next time they join.");
+                return true;
             }
-            return true;
-        }
-
-        if(player.hasPermission("survivalutil.unaccept") && command.getName().equalsIgnoreCase("unaccept")) {
-            if (!(args.length == 1)) {
-                return false;
-            }
-
-            OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-
-            if(p.hasPlayedBefore()) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent add default");
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + p.getName() + " parent remove player");
-                sender.sendMessage(ChatColor.GREEN + args[0] + " was unaccepted from the server.");
-            } else {
-                if (!plugin.getConfig().contains(args[0])) {
-                    sender.sendMessage(ChatColor.RED + args[0] + " is not currently accepted!");
-                    return true;
-                }
-                plugin.getConfig().set(args[0], null);
-                plugin.saveConfig();
-                sender.sendMessage(ChatColor.RED + args[0] + " will no longer be accepted the next time they join.");
-            }
-            return true;
         }
         sender.sendMessage(ChatColor.RED + "You don't have permission to run this command or an error occurred!");
         return false;

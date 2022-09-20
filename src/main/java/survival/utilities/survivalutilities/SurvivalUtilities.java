@@ -19,7 +19,7 @@ public final class SurvivalUtilities extends JavaPlugin{
     }
 
     public void registerCommands() {
-        getCommand("apply").setExecutor(new ApplicationBook());
+        getCommand("apply").setExecutor(new ApplyCommand());
         getCommand("accept").setExecutor(new AcceptCommand());
         getCommand("unaccept").setExecutor(new AcceptCommand());
     }

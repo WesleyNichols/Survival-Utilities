@@ -6,14 +6,14 @@ authors: [ wmn ]
 description: Custom additions for survival server
 commands:
   apply:
-    description: Used to apply to join
+    description: Apply to join as a member
     usage: /apply
     permission: survivalutil.apply
   accept:
-      description: Accept a user as a member
+      description: Accept as a member
       usage: /accept <player>
       permission: survivalutil.accept
   unaccept:
-      description: Undo acceptance of a user as a member
+      description: Undo accept of a member
       usage: /unaccept <player>
       permission: survivalutil.unaccept
