@@ -39,6 +39,9 @@ public class OnPlayerJoin implements Listener {
             }, 100);
         }
 
+        //  Tablist Header/Footer
+        player.sendPlayerListHeaderAndFooter(Component.text(ChatColor.GOLD + "Server Name Here!"), Component.text(ChatColor.YELLOW + "mc.servername.com"));
+
         //  Accept if default player who is accepted in config
         if(config.getString(uuid.toString()) != null && config.getInt(uuid.toString()) == 0 && player.hasPermission("group.default")){
             player.getInventory().clear();
