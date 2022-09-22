@@ -17,7 +17,7 @@ import survival.utilities.survivalutilities.config.CustomConfig;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AcceptCommand implements CommandExecutor{
+public class Accept implements CommandExecutor{
 
     private final Mojang api = new Mojang().connect();
 
