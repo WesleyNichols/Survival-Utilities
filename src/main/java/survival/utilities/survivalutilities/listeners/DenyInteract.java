@@ -16,8 +16,6 @@ import org.bukkit.event.player.*;
 import survival.utilities.survivalutilities.SurvivalUtilities;
 
 public class DenyInteract implements Listener {
-    public DenyInteract(SurvivalUtilities e) {
-    }
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {

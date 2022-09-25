@@ -13,6 +13,10 @@ commands:
     description: Apply to join as a member
     usage: /apply
     permission: survivalutil.apply
+  heal:
+    description: Restore health and hunger of a player
+    usage: /heal <player>
+    permission: survivalutil.heal
   help:
     description: Displays help menu
     usage: /help

@@ -15,7 +15,9 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
 
-public class Apply implements CommandExecutor {
+public class ApplyCommand implements CommandExecutor {
+
+    public static String getCommand = "apply";
     private static final String form = "https://forms.gle/q1oyyqkPhz9d12YZ7";
 
     @Override

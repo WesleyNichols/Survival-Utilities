@@ -6,7 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class Help implements CommandExecutor {
+public class HelpCommand implements CommandExecutor {
+
+    public static String getCommand = "help";
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (label.equalsIgnoreCase("help")) {

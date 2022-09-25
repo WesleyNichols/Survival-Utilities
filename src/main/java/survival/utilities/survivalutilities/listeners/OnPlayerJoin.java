@@ -14,8 +14,6 @@ import survival.utilities.survivalutilities.config.CustomConfig;
 import java.util.UUID;
 
 public class OnPlayerJoin implements Listener {
-    public OnPlayerJoin(SurvivalUtilities e) {
-    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
