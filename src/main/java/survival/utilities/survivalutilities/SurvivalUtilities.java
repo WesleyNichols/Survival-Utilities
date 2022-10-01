@@ -25,9 +25,9 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.registerEvent(new OnPlayerJoin());
         this.registerEvent(new DenyInteract());
 
-        this.registerCommand(ApplyCommand.getCommand, new AcceptCommand());
-        this.registerCommand(AcceptCommand.getCommand[0], new ApplyCommand());
-        this.registerCommand(AcceptCommand.getCommand[1], new ApplyCommand());
+        this.registerCommand(ApplyCommand.getCommand, new ApplyCommand());
+        this.registerCommand(AcceptCommand.getCommand[0], new AcceptCommand());
+        this.registerCommand(AcceptCommand.getCommand[1], new AcceptCommand());
         this.registerCommand(HealCommand.getCommand, new HealCommand());
         this.registerCommand(HelpCommand.getCommand, new HelpCommand());
     }

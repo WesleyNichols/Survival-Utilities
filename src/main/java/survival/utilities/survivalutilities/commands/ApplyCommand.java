@@ -22,37 +22,36 @@ public class ApplyCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (label.equalsIgnoreCase("apply")) {
-            if (sender instanceof Player) {
-                ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-                BookMeta bookmeta = (BookMeta) book.getItemMeta();
-                bookmeta.setAuthor("");
-                bookmeta.setTitle("");
+        if (sender instanceof Player) {
+            ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+            BookMeta bookmeta = (BookMeta) book.getItemMeta();
+            bookmeta.setAuthor("");
+            bookmeta.setTitle("");
 
-                TextComponent textComponent = Component.text("\n   Apply to Join\n\n")
-                        .color(NamedTextColor.BLACK)
-                        .decoration(TextDecoration.BOLD, true)
-                        .append(
-                                Component.text(" ✧  ✦  ✧  ✪  ✧  ✦  ✧\n\n")
-                                        .color(NamedTextColor.DARK_PURPLE)
-                                        .decoration(TextDecoration.BOLD, false)
-                                        .append(
-                                                Component.text("Staff will review your application as soon as possible - once approved you're ready to play!\n\n")
-                                                        .color(NamedTextColor.BLACK)
-                                                        .decoration(TextDecoration.BOLD, false))
-                                        .append(
-                                                Component.text("  [Click to Apply]")
-                                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form))
-                                                        .color(NamedTextColor.DARK_AQUA)
-                                                        .decoration(TextDecoration.BOLD, true)
-                                        ));
+            TextComponent textComponent = Component.text("\n   Apply to Join\n\n")
+                    .color(NamedTextColor.BLACK)
+                    .decoration(TextDecoration.BOLD, true)
+                    .append(
+                            Component.text(" ✧  ✦  ✧  ✪  ✧  ✦  ✧\n\n")
+                                    .color(NamedTextColor.DARK_PURPLE)
+                                    .decoration(TextDecoration.BOLD, false)
+                                    .append(
+                                            Component.text("Staff will review your application as soon as possible - once approved you're ready to play!\n\n")
+                                                    .color(NamedTextColor.BLACK)
+                                                    .decoration(TextDecoration.BOLD, false))
+                                    .append(
+                                            Component.text("  [Click to Apply]")
+                                                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form))
+                                                    .color(NamedTextColor.DARK_AQUA)
+                                                    .decoration(TextDecoration.BOLD, true)
+                                    ));
 
-                bookmeta.addPages(textComponent);
-                book.setItemMeta(bookmeta);
+            bookmeta.addPages(textComponent);
+            book.setItemMeta(bookmeta);
 
-                ((Player) sender).openBook(book);
-            }
+            ((Player) sender).openBook(book);
+            return true;
         }
-        return true;
+        return false;
     }
 }
