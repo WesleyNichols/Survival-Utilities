@@ -3,6 +3,7 @@ package survival.utilities.survivalutilities.config;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import survival.utilities.survivalutilities.SurvivalUtilities;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class CustomConfig {
 
     //  Find or generate a custom config
     public static void load(String FilePath) {
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities").getDataFolder(), FilePath);
+        file = new File(SurvivalUtilities.getInstance().getDataFolder(), FilePath);
 
         if (!file.exists()) {
             try {
@@ -39,7 +40,4 @@ public class CustomConfig {
         }
     }
 
-    public static void reload() {
-        customFile = YamlConfiguration.loadConfiguration(file);
-    }
 }

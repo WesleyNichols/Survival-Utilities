@@ -35,7 +35,7 @@ public class AFKManager extends BukkitRunnable {
             String prefix = formatManager.getCustomPrefix(tabPlayer);
 
             if (isAFK(player)) {
-                player.sendActionBar(Component.text(ChatColor.RED + "You're currently AFK"));
+                player.sendActionBar(Component.text(ChatColor.GRAY + "You're currently AFK"));
                 if (prefix == null) {   //  Is AFK, but hasn't been marked in tablist
                     formatManager.setPrefix(tabPlayer, ChatColor.GRAY + "");
                 }
