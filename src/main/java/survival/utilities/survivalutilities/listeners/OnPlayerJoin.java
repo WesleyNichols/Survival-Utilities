@@ -31,9 +31,6 @@ public class OnPlayerJoin implements Listener {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.5F, 0.69F);
         }, 100);
 
-        //  Tablist Header/Footer (currently residing in TAB config)
-//        player.sendPlayerListHeaderAndFooter(Component.text(ChatColor.GOLD + "The Bee Keep"), Component.text(ChatColor.YELLOW + "mc.beekeep.com"));
-
         //  Accept if default player who is accepted in config
         if(config.getString(uuid.toString()) != null && config.getInt(uuid.toString()) == 0 && player.hasPermission("group.default")){
             player.getInventory().clear();
