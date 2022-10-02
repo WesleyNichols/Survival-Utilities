@@ -3,7 +3,6 @@ package survival.utilities.survivalutilities;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import survival.utilities.survivalutilities.commands.AcceptCommand;
 import survival.utilities.survivalutilities.commands.ApplyCommand;
 import survival.utilities.survivalutilities.commands.HealCommand;
