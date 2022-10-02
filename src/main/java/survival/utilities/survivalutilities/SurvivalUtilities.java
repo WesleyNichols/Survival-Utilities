@@ -57,4 +57,3 @@ public final class SurvivalUtilities extends JavaPlugin {
         instance.getCommand(command).setExecutor(executor);
     }
 }
-

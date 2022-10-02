@@ -82,6 +82,7 @@
             <groupId>com.github.SparklingComet</groupId>
             <artifactId>java-mojang-api</artifactId>
             <version>-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.luckperms</groupId>
