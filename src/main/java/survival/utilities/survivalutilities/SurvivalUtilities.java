@@ -3,6 +3,7 @@ package survival.utilities.survivalutilities;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import survival.utilities.survivalutilities.commands.AcceptCommand;
 import survival.utilities.survivalutilities.commands.ApplyCommand;
 import survival.utilities.survivalutilities.commands.HealCommand;
@@ -32,12 +33,11 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.registerEvent(new AFKListener());
 
         this.registerCommand(ApplyCommand.getCommand, new ApplyCommand());
-        this.registerCommand(AcceptCommand.getCommand[0], new AcceptCommand());
-        this.registerCommand(AcceptCommand.getCommand[1], new AcceptCommand());
+        this.registerCommand(AcceptCommand.getCommand, new AcceptCommand());
         this.registerCommand(HealCommand.getCommand, new HealCommand());
         this.registerCommand(HelpCommand.getCommand, new HelpCommand());
 
-        new AFKManager().runTaskTimer(this, 20L, 20L);
+        new AFKManager().runTaskTimer(this, 30L, 30L);
     }
 
     @Override

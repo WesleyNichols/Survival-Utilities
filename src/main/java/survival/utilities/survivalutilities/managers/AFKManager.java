@@ -1,6 +1,7 @@
 package survival.utilities.survivalutilities.managers;
 
 import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.TabPlayer;
 import me.neznamy.tab.api.TablistFormatManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -14,10 +15,10 @@ import java.util.UUID;
 
 public class AFKManager extends BukkitRunnable {
 
-    TabAPI tabAPI = TabAPI.getInstance();
+    private final TabAPI tabAPI = TabAPI.getInstance();
     private static final TablistFormatManager formatManager = TabAPI.getInstance().getTablistFormatManager();
 
-    private static final long MovementThreshold = 3000L;    // TODO -> 600000L
+    private static final long MovementThreshold = 600000L;  //  10 minutes
     private static final HashMap<UUID, Long> players = new HashMap<>();
 
     public void run() {
@@ -30,15 +31,18 @@ public class AFKManager extends BukkitRunnable {
                 continue;
             }
 
-            String prefix = formatManager.getCustomPrefix(tabAPI.getPlayer(player.getUniqueId()));
+            TabPlayer tabPlayer = tabAPI.getPlayer(player.getUniqueId());
+            String prefix = formatManager.getCustomPrefix(tabPlayer);
+
             if (isAFK(player)) {
-                player.sendActionBar(Component.text(ChatColor.RED + "You're marked AFK"));
-                if (prefix == null) {
-                    formatManager.setPrefix(tabAPI.getPlayer(player.getUniqueId()), ChatColor.GRAY + "");
+                player.sendActionBar(Component.text(ChatColor.RED + "You're currently AFK"));
+                if (prefix == null) {   //  Is AFK, but hasn't been marked in tablist
+                    formatManager.setPrefix(tabPlayer, ChatColor.GRAY + "");
                 }
             } else {
-                if (prefix != null) {
-                    formatManager.resetPrefix(tabAPI.getPlayer(player.getUniqueId()));
+                if (prefix != null) {   //  No longer AFK, but hasn't been updated in tablist
+                    player.sendActionBar(Component.text(""));
+                    formatManager.resetPrefix(tabPlayer);
                 }
             }
         }

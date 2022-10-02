@@ -7,9 +7,10 @@ authors: [ wmn ]
 description: Custom additions for survival server
 commands:
   accept:
-    description: Accept as a member
-    usage: /accept <player>
+    description: Accept/unaccept players as members
+    usage: /accept <player>, /unaccept <player>
     permission: survivalutil.accept
+    aliases: [unaccept]
   apply:
     description: Apply to join as a member
     usage: /apply
@@ -22,7 +23,3 @@ commands:
     description: Displays help menu
     usage: /help
     permission: survivalutil.help
-  unaccept:
-      description: Undo accept of a member
-      usage: /unaccept <player>
-      permission: survivalutil.unaccept
