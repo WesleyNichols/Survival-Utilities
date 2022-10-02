@@ -1,6 +1,7 @@
 name: SurvivalUtilities
 version: '${project.version}'
 main: survival.utilities.survivalutilities.SurvivalUtilities
+depend: [TAB]
 api-version: 1.19
 authors: [ wmn ]
 description: Custom additions for survival server

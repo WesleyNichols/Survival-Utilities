@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public class AFKManager extends BukkitRunnable {
 
-//    private final TabAPI tabAPI = TabAPI.getInstance();
-//    private static final TablistFormatManager formatManager = TabAPI.getInstance().getTablistFormatManager();
+    TabAPI tabAPI = TabAPI.getInstance();
+    private static final TablistFormatManager formatManager = TabAPI.getInstance().getTablistFormatManager();
 
     private static final long MovementThreshold = 3000L;    // TODO -> 600000L
     private static final HashMap<UUID, Long> players = new HashMap<>();
@@ -24,20 +24,22 @@ public class AFKManager extends BukkitRunnable {
         if (!SurvivalUtilities.getInstance().isEnabled()) { this.cancel(); }
 
         for (UUID uuid : players.keySet()) {
-            Bukkit.broadcast(Component.text("cringe"));
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) {
                 players.remove(uuid);
                 continue;
             }
 
+            String prefix = formatManager.getCustomPrefix(tabAPI.getPlayer(player.getUniqueId()));
             if (isAFK(player)) {
-                Bukkit.broadcast(Component.text("im cringing"));
-                player.sendActionBar(Component.text(ChatColor.RED + "You're marked CRINGE"));
-                enableAFK(player);
+                player.sendActionBar(Component.text(ChatColor.RED + "You're marked AFK"));
+                if (prefix == null) {
+                    formatManager.setPrefix(tabAPI.getPlayer(player.getUniqueId()), ChatColor.GRAY + "");
+                }
             } else {
-                Bukkit.broadcast(Component.text("giga cringe"));
-                disableAFK(player);
+                if (prefix != null) {
+                    formatManager.resetPrefix(tabAPI.getPlayer(player.getUniqueId()));
+                }
             }
         }
     }
@@ -52,14 +54,6 @@ public class AFKManager extends BukkitRunnable {
 
     public static boolean isAFK(Player player) {
         return System.currentTimeMillis() - players.get(player.getUniqueId()) >= MovementThreshold;
-    }
-
-    private void enableAFK(Player player) {
-//        formatManager.setPrefix(tabAPI.getPlayer(player.getUniqueId()), ChatColor.GRAY + "");
-    }
-
-    private void disableAFK(Player player) {
-//        formatManager.resetPrefix(tabAPI.getPlayer(player.getUniqueId()));
     }
 
 }
