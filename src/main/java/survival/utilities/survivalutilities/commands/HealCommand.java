@@ -15,28 +15,24 @@ public class HealCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (label.equalsIgnoreCase("heal")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-
-                if (args.length > 0) {
-                    if (Bukkit.getOnlinePlayers().stream().anyMatch(e -> e.getName().equalsIgnoreCase(args[0]))) {
-                        Player target = Bukkit.getPlayer(args[0]);
-                        target.setHealth(20);
-                        target.setFoodLevel(20);
-                        player.sendMessage(Component.text(ChatColor.GREEN + "Healed " + target.getName()));
-                        target.sendMessage(Component.text(ChatColor.GREEN + "You were healed by " + player.getName()));
-                    } else {
-                        player.sendMessage(Component.text(ChatColor.DARK_GREEN + args[0] + " is not a valid target!"));
-                        return false;
-                    }
+        if (label.equalsIgnoreCase("heal") && sender instanceof Player player) {
+            if (args.length > 0) {
+                if (Bukkit.getOnlinePlayers().stream().anyMatch(e -> e.getName().equalsIgnoreCase(args[0]))) {
+                    Player target = Bukkit.getPlayer(args[0]);
+                    target.setHealth(20);
+                    target.setFoodLevel(20);
+                    player.sendMessage(Component.text(ChatColor.GREEN + "Healed " + target.getName()));
+                    target.sendMessage(Component.text(ChatColor.GREEN + "You were healed by " + player.getName()));
                 } else {
-                    player.setHealth(20);
-                    player.setFoodLevel(20);
-                    player.sendMessage(Component.text(ChatColor.GREEN + "Healed " + player.getName()));
+                    player.sendMessage(Component.text(ChatColor.DARK_GREEN + args[0] + " is not a valid target!"));
+                    return false;
                 }
-                return true;
+            } else {
+                player.setHealth(20);
+                player.setFoodLevel(20);
+                player.sendMessage(Component.text(ChatColor.GREEN + "Healed " + player.getName()));
             }
+            return true;
         }
         return false;
     }
