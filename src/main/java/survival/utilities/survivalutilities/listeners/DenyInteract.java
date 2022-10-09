@@ -58,7 +58,7 @@ public class DenyInteract implements Listener {
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event) {
         if(event.getTarget() instanceof Player){
-            Player player = (Player) event.getTarget();
+            Player player = ((Player) event.getTarget()).getPlayer();
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
@@ -76,7 +76,7 @@ public class DenyInteract implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if(event.getEntityType() == EntityType.PLAYER){
-            Player player = (Player) event.getEntity();
+            Player player = ((Player) event.getEntity()).getPlayer();
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
@@ -86,7 +86,7 @@ public class DenyInteract implements Listener {
     @EventHandler
     public void preventDamage(EntityDamageByEntityEvent event) {
         if(event.getDamager().getType() == EntityType.PLAYER){
-            Player player = (Player) event.getDamager();
+            Player player = ((Player) event.getDamager()).getPlayer();
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
@@ -96,7 +96,7 @@ public class DenyInteract implements Listener {
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent event) {
         if(event.getEntityType() == EntityType.PLAYER){
-            Player player = (Player) event.getEntity();
+            Player player = ((Player) event.getEntity()).getPlayer();
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
