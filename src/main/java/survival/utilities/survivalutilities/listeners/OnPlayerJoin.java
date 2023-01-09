@@ -29,7 +29,7 @@ public class OnPlayerJoin implements Listener {
             }
             player.sendActionBar(Component.text(ChatColor.GOLD + "Welcome " + ChatColor.YELLOW + player.getName() + ChatColor.GOLD + "!"));
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.5F, 0.69F);
-        }, 100);
+        }, 120);
 
         //  Accept if default player who is accepted in config
         if(config.getString(uuid.toString()) != null && config.getInt(uuid.toString()) == 0 && player.hasPermission("group.default")){

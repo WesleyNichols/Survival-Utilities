@@ -19,10 +19,11 @@ public class HealCommand implements CommandExecutor {
             if (args.length > 0) {
                 if (Bukkit.getOnlinePlayers().stream().anyMatch(e -> e.getName().equalsIgnoreCase(args[0]))) {
                     Player target = Bukkit.getPlayer(args[0]);
+                    assert target != null;
                     target.setHealth(20);
                     target.setFoodLevel(20);
                     player.sendMessage(Component.text(ChatColor.GREEN + "Healed " + target.getName()));
-                    target.sendMessage(Component.text(ChatColor.GREEN + "You were healed by " + player.getName()));
+                    if (target != player) { target.sendMessage(Component.text(ChatColor.GREEN + "You were healed by " + player.getName())); }
                 } else {
                     player.sendMessage(Component.text(ChatColor.DARK_GREEN + args[0] + " is not a valid target!"));
                     return false;

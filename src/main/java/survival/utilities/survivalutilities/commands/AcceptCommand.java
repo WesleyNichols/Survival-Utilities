@@ -16,14 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import org.shanerx.mojang.Mojang;
 import survival.utilities.survivalutilities.config.CustomConfig;
 
-import java.util.Objects;
+//import java.util.Objects;
 import java.util.UUID;
 
 public class AcceptCommand implements CommandExecutor{
 
     public static String getCommand = "accept";
     private final Mojang mojang = new Mojang().connect();
-    private final LuckPerms luckPerms = LuckPermsProvider.get();
+    private static final LuckPerms luckPerms = LuckPermsProvider.get();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -51,16 +51,9 @@ public class AcceptCommand implements CommandExecutor{
                 }
 
                 if (user.hasPlayedBefore()) {
+                    acceptUserByUUID(uuid);
                     sender.sendMessage(ChatColor.GOLD + "You accepted " + ChatColor.YELLOW + user.getName() + ChatColor.GOLD + " to the server!");
                     config.set(uuid.toString(), 1);
-
-                    luckPerms.getUserManager().modifyUser(uuid, u -> {
-                        u.data().add(Node.builder("group.player").build());
-                        u.data().remove(Node.builder("group.default").build());
-                    });
-
-                    if (user.isOnline())
-                        Bukkit.broadcast(Component.text(ChatColor.GREEN + user.getName() + " was accepted as a member!"));
                 } else {
                     sender.sendMessage(ChatColor.RED + user.getName() + " will be accepted the next time they join.");
                     config.set(uuid.toString(), 0);
@@ -78,15 +71,9 @@ public class AcceptCommand implements CommandExecutor{
                     return true;
                 }
 
-                String group = Objects.requireNonNull(luckPerms.getUserManager().getUser(uuid)).getPrimaryGroup();
-                if (group.equals("moderator") || group.equals("administrator") || group.equals("developer")) {
-                    sender.sendMessage(ChatColor.DARK_RED + user.getName() + " can't be unaccepted, they're too powerful!");
-                    return false;
-                }
-
                 if (user.hasPlayedBefore()) {
+
                     sender.sendMessage(ChatColor.GOLD + "You unaccepted " + ChatColor.YELLOW + user.getName() + ChatColor.GOLD + " from the server!");
-                    luckPerms.getUserManager().modifyUser(uuid, u -> u.data().clear());
                 } else {
                     sender.sendMessage(ChatColor.RED + user.getName() + " will no longer be accepted the next time they join.");
                 }
@@ -99,4 +86,26 @@ public class AcceptCommand implements CommandExecutor{
         }
         return false;
     }
+
+    public static void acceptUserByUUID(UUID uuid) {
+        luckPerms.getUserManager().modifyUser(uuid, u -> {
+            u.data().add(Node.builder("group.player").build());
+            u.data().remove(Node.builder("group.default").build());
+        });
+
+        OfflinePlayer user = Bukkit.getOfflinePlayer(uuid);
+        if (user.isOnline())
+            Bukkit.broadcast(Component.text(ChatColor.GREEN + user.getName() + " was accepted as a member!"));
+    }
+
+//    public static boolean unacceptUserByUUID(UUID uuid, Player source) {
+//        String group = Objects.requireNonNull(luckPerms.getUserManager().getUser(uuid)).getPrimaryGroup();
+//        if (group.equals("moderator") || group.equals("administrator") || group.equals("developer")) {
+//            source.sendMessage(ChatColor.DARK_RED + Bukkit.getOfflinePlayer(uuid).getName() + " can't be unaccepted, they're too powerful!");
+//            return false;
+//        }
+//
+//        luckPerms.getUserManager().modifyUser(uuid, u -> u.data().clear());
+//        return true;
+//    }
 }
