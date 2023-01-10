@@ -10,8 +10,8 @@ import survival.utilities.survivalutilities.commands.HelpCommand;
 import survival.utilities.survivalutilities.config.CustomConfig;
 import survival.utilities.survivalutilities.listeners.AFKListener;
 import survival.utilities.survivalutilities.listeners.DenyInteract;
-import survival.utilities.survivalutilities.listeners.OnPlayerJoin;
 import survival.utilities.survivalutilities.managers.AFKManager;
+import survival.utilities.survivalutilities.managers.PlayerManager;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         CustomConfig.load("player.yml");
         CustomConfig.save();
 
-        this.registerEvent(new OnPlayerJoin());
+        this.registerEvent(new PlayerManager());
         this.registerEvent(new DenyInteract());
         this.registerEvent(new AFKListener());
 

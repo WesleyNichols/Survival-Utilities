@@ -39,7 +39,6 @@ public class DenyInteract implements Listener {
             assert player != null;
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
-                applyMessage(player);
             }
         }
     }
@@ -116,6 +115,7 @@ public class DenyInteract implements Listener {
             assert player != null;
             if(player.hasPermission("group.default")) {
                 event.setCancelled(true);
+                applyMessage(player);
             }
         }
     }
