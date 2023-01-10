@@ -13,6 +13,8 @@ import survival.utilities.survivalutilities.listeners.DenyInteract;
 import survival.utilities.survivalutilities.listeners.OnPlayerJoin;
 import survival.utilities.survivalutilities.managers.AFKManager;
 
+import java.util.Objects;
+
 
 public final class SurvivalUtilities extends JavaPlugin {
 
@@ -36,7 +38,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.registerCommand(HealCommand.getCommand, new HealCommand());
         this.registerCommand(HelpCommand.getCommand, new HelpCommand());
 
-        new AFKManager().runTaskTimer(this, 30L, 30L);
+        new AFKManager().runTaskTimer(this, 10L, 60L);
     }
 
     @Override
@@ -53,6 +55,6 @@ public final class SurvivalUtilities extends JavaPlugin {
     }
 
     public void registerCommand(String command, CommandExecutor executor) {
-        instance.getCommand(command).setExecutor(executor);
+        Objects.requireNonNull(instance.getCommand(command)).setExecutor(executor);
     }
 }

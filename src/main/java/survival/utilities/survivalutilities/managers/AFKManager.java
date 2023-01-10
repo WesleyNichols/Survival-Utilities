@@ -26,7 +26,7 @@ public class AFKManager extends BukkitRunnable {
 
         for (UUID uuid : players.keySet()) {
             Player player = Bukkit.getPlayer(uuid);
-            if (player == null) {
+            if (player == null || player.hasPermission("group.default")) {
                 players.remove(uuid);
                 continue;
             }

@@ -26,7 +26,7 @@ public class HealCommand implements CommandExecutor {
                     if (target != player) { target.sendMessage(Component.text(ChatColor.GREEN + "You were healed by " + player.getName())); }
                 } else {
                     player.sendMessage(Component.text(ChatColor.DARK_GREEN + args[0] + " is not a valid target!"));
-                    return false;
+                    return true;
                 }
             } else {
                 player.setHealth(20);
