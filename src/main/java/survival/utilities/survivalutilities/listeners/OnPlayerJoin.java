@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import survival.utilities.survivalutilities.SurvivalUtilities;
 import survival.utilities.survivalutilities.config.CustomConfig;
 
+import static survival.utilities.survivalutilities.managers.PlayerManager.*;
+
 import java.util.UUID;
 
 public class OnPlayerJoin implements Listener {
@@ -31,14 +33,9 @@ public class OnPlayerJoin implements Listener {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.5F, 0.69F);
         }, 120);
 
-        //  Accept if default player who is accepted in config
-        if(config.getString(uuid.toString()) != null && config.getInt(uuid.toString()) == 0 && player.hasPermission("group.default")){
-            player.getInventory().clear();
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent add player");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent remove default");
-            Bukkit.getScheduler().runTaskLater(SurvivalUtilities.getInstance(), () -> Bukkit.broadcast(Component.text(ChatColor.GREEN + player.getName() + " was accepted as a member!")), 60);
-            config.set(player.getUniqueId().toString(), 1);
-            CustomConfig.save();
+        //  Accept player if needed
+        if(playerStatus(player) && config.getInt(uuid.toString()) == 0){
+            playerAccept(player);
         }
     }
 }

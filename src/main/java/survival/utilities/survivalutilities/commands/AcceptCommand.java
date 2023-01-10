@@ -1,111 +1,69 @@
 package survival.utilities.survivalutilities.commands;
 
-import net.kyori.adventure.text.Component;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.node.Node;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.shanerx.mojang.Mojang;
-import survival.utilities.survivalutilities.config.CustomConfig;
 
-//import java.util.Objects;
-import java.util.UUID;
+import static survival.utilities.survivalutilities.managers.PlayerManager.*;
 
 public class AcceptCommand implements CommandExecutor{
 
     public static String getCommand = "accept";
     private final Mojang mojang = new Mojang().connect();
-    private static final LuckPerms luckPerms = LuckPermsProvider.get();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = (Player) sender;
-        FileConfiguration config = CustomConfig.get();
-
         if (!(args.length == 1)) { return false; }
 
-        if (player.hasPermission("survivalutil.accept")) {
-            OfflinePlayer user = Bukkit.getOfflinePlayer(args[0]);
-            UUID uuid = user.getUniqueId();
+        if (sender.hasPermission("survivalutil.accept")) {
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 
             try {
-                mojang.getUUIDOfUsername(user.getName());
+                mojang.getUUIDOfUsername(target.getName());
             } catch (Exception e) {
-                sender.sendMessage(ChatColor.RED + user.getName() + " is not a valid user!");
+                sender.sendMessage(ChatColor.RED + target.getName() + " is not a valid user!");
                 return true;
             }
 
             //  region Accept
-            if (command.getName().equalsIgnoreCase(getCommand)) {
-                if (config.contains(uuid.toString())) {
-                    sender.sendMessage(ChatColor.RED + user.getName() + " is already accepted!");
+            if (label.equalsIgnoreCase("accept")) {
+                if (playerStatus(target)) {
+                    sender.sendMessage(ChatColor.RED + target.getName() + " is already accepted!");
                     return true;
                 }
 
-                if (user.hasPlayedBefore()) {
-                    acceptUserByUUID(uuid);
-                    sender.sendMessage(ChatColor.GOLD + "You accepted " + ChatColor.YELLOW + user.getName() + ChatColor.GOLD + " to the server!");
-                    config.set(uuid.toString(), 1);
+                if (playerAccept(target)) {
+                    sender.sendMessage(ChatColor.GOLD + "You accepted " + ChatColor.YELLOW + target.getName() + ChatColor.GOLD + " to the server!");
+                    return true;
                 } else {
-                    sender.sendMessage(ChatColor.RED + user.getName() + " will be accepted the next time they join.");
-                    config.set(uuid.toString(), 0);
+                    sender.sendMessage(ChatColor.DARK_RED + "Failed to accept user " + target.getName() + "! If you believe this is an error please contact a developer.");
+                    return false;
                 }
-
-                CustomConfig.save();
-                return true;
             }
             // endregion
 
             //  region Unaccept
-            if (command.getName().equalsIgnoreCase("unaccept")) {
-                if (!config.contains(uuid.toString())) {
-                    sender.sendMessage(ChatColor.RED + user.getName() + " is not currently accepted!");
+            if (label.equalsIgnoreCase("unaccept")) {
+                if (!playerStatus(target)) {
+                    sender.sendMessage(ChatColor.RED + target.getName() + " is already not accepted!");
                     return true;
                 }
 
-                if (user.hasPlayedBefore()) {
-
-                    sender.sendMessage(ChatColor.GOLD + "You unaccepted " + ChatColor.YELLOW + user.getName() + ChatColor.GOLD + " from the server!");
+                if (playerUnaccept(target)) {
+                    sender.sendMessage(ChatColor.GOLD + "You unaccepted " + ChatColor.YELLOW + target.getName() + ChatColor.GOLD + " from the server!");
+                    return true;
                 } else {
-                    sender.sendMessage(ChatColor.RED + user.getName() + " will no longer be accepted the next time they join.");
+                    sender.sendMessage(ChatColor.DARK_RED + "Failed to unaccept user " + target.getName() + "! If you believe this is an error please contact a developer.");
+                    return false;
                 }
-
-                config.set(uuid.toString(), null);
-                CustomConfig.save();
-                return true;
             }
             //  endregion
         }
         return false;
     }
-
-    public static void acceptUserByUUID(UUID uuid) {
-        luckPerms.getUserManager().modifyUser(uuid, u -> {
-            u.data().add(Node.builder("group.player").build());
-            u.data().remove(Node.builder("group.default").build());
-        });
-
-        OfflinePlayer user = Bukkit.getOfflinePlayer(uuid);
-        if (user.isOnline())
-            Bukkit.broadcast(Component.text(ChatColor.GREEN + user.getName() + " was accepted as a member!"));
-    }
-
-//    public static boolean unacceptUserByUUID(UUID uuid, Player source) {
-//        String group = Objects.requireNonNull(luckPerms.getUserManager().getUser(uuid)).getPrimaryGroup();
-//        if (group.equals("moderator") || group.equals("administrator") || group.equals("developer")) {
-//            source.sendMessage(ChatColor.DARK_RED + Bukkit.getOfflinePlayer(uuid).getName() + " can't be unaccepted, they're too powerful!");
-//            return false;
-//        }
-//
-//        luckPerms.getUserManager().modifyUser(uuid, u -> u.data().clear());
-//        return true;
-//    }
 }
