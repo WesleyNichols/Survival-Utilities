@@ -23,3 +23,7 @@ commands:
     description: Displays help menu
     usage: /help
     permission: survivalutil.help
+  map:
+    description: Displays map link
+    usage: /map
+    permission: survivalutil.map
