@@ -22,7 +22,7 @@ public class ApplyCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
+        if (label.equalsIgnoreCase(getCommand) && sender instanceof Player) {
             ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
             BookMeta bookmeta = (BookMeta) book.getItemMeta();
             bookmeta.setAuthor("");

@@ -21,22 +21,22 @@ public final class SurvivalUtilities extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        saveDefaultConfig();
-
-        CustomConfig.load("player.yml");
-        CustomConfig.save();
+        saveConfig();
+        reloadConfigs();
 
         this.registerEvent(new PlayerManager());
         this.registerEvent(new DenyInteract());
         this.registerEvent(new AFKListener());
 
-        this.registerCommand(ApplyCommand.getCommand, new ApplyCommand());
         this.registerCommand(AcceptCommand.getCommand, new AcceptCommand());
+        this.registerCommand(ApplyCommand.getCommand, new ApplyCommand());
         this.registerCommand(HealCommand.getCommand, new HealCommand());
         this.registerCommand(HelpCommand.getCommand, new HelpCommand());
+        this.registerCommand(InfoCommand.getCommand, new InfoCommand());
         this.registerCommand(MapCommand.getCommand, new MapCommand());
+        this.registerCommand(ReloadCommand.getCommand, new ReloadCommand());
 
-        new AFKManager().runTaskTimer(this, 10L, 60L);
+        new AFKManager().runTaskTimer(this, 20L, 40L);
     }
 
     @Override
@@ -54,5 +54,12 @@ public final class SurvivalUtilities extends JavaPlugin {
 
     public void registerCommand(String command, CommandExecutor executor) {
         Objects.requireNonNull(instance.getCommand(command)).setExecutor(executor);
+    }
+
+    public void reloadConfigs() {
+        CustomConfig.load("player.yml");
+        CustomConfig.save();
+        CustomConfig.load("config.yml");
+        CustomConfig.save();
     }
 }

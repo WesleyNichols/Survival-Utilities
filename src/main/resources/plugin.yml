@@ -22,8 +22,16 @@ commands:
   help:
     description: Displays help menu
     usage: /help
-    permission: survivalutil.help
+    aliases: [assist, assistance, aid, aids, support, supports, guide, guidance]
+  info:
+    description: Display map info
+    usage: /info
+    aliases: [information, detail, details, find, finds, finding, item, items]
   map:
     description: Displays map link
     usage: /map
-    permission: survivalutil.map
+    aliases: [maps, world, worlds, view, views, link, links, overview, webmap, webmaps]
+  reload:
+    description: Reload configs
+    usage: /survivalutilities:reload
+    permission: survivalutil.reload

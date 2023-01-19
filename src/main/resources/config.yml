@@ -1,0 +1,7 @@
+# Help Command Output
+help:
+  - "Text"
+
+# Info Command Output
+info:
+  - "Text"

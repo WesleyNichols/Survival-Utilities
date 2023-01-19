@@ -38,7 +38,7 @@ public class PlayerManager implements Listener {
                 });
                 config.set(player.getUniqueId().toString(), 1);
                 Bukkit.getScheduler().runTaskLater(SurvivalUtilities.getInstance(),
-                        () -> Bukkit.broadcast(Component.text(ChatColor.GREEN + player.getName() + " was accepted as a member!")), 60);
+                        () -> Bukkit.broadcast(Component.text(ChatColor.GREEN + player.getName() + " was accepted as a member!")), 40);
             } else {
                 config.set(player.getUniqueId().toString(), 0);
             }
