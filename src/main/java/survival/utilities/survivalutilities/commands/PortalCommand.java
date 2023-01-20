@@ -2,6 +2,7 @@ package survival.utilities.survivalutilities.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,14 +25,16 @@ public class PortalCommand implements CommandExecutor {
                 sender.sendMessage(Component.text("You can't link portals from The End!"));
                 return true;
             }
+            boolean normalWorld = player.getWorld().getEnvironment().equals(World.Environment.NORMAL);
+            Location loc =  player.getLocation().toBlockLocation().multiply(normalWorld ? 1F/8 : 8);
 
             int[] pos = {
-                    (int) Math.floor(player.getLocation().getBlockX() * (player.getWorld().getEnvironment().equals(World.Environment.NORMAL) ? 1F/8 : 8)),
-                    (int) Math.floor(player.getLocation().getBlockZ() * (player.getWorld().getEnvironment().equals(World.Environment.NORMAL) ? 1F/8 : 8))
+                    loc.getBlockX(),
+                    loc.getBlockZ()
             };
 
             sender.sendMessage(Component.text("Build a portal in the "
-                    + (player.getWorld().getEnvironment().equals(World.Environment.NORMAL) ? "Nether" : "Overworld") + " at "
+                    + (normalWorld ? "Nether" : "Overworld") + " at "
                     + Arrays.toString(pos) + " to link the two portals together").color(NamedTextColor.YELLOW));
         }
         return true;
