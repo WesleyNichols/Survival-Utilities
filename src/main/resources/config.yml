@@ -1,7 +1,42 @@
 # Help Command Output
 help:
-  - "Text"
+  - '&7------------ &6[ &f&lBee Box Help &6] &7------------'
+  - ''
+  - '&6/apply: &fApply to become a member'
+  - '&6/co inspect: &fToggle the block inspector &7&o(Donor only)'
+  - '&6/discord: &fJoin our discord'
+  - '&6/discord link: &fLink your Minecraft and Discord Accounts'
+  - '&6/info: &fView map information'
+  - '&6/map: &fView the online map'
+  - '&6/rules: &fRead the server''s rules'
+  - '&6/vote: &fVote for Bee Box MC'
+  - ''
+  - '&7-----------------------------------------'
 
 # Info Command Output
 info:
-  - "Text"
+  - '&7---------- &6[ &f&lSeason 1 Info &6] &7----------'
+  - '&6Soft Border: &f10000x10000'
+  - '&7&oBuild safely within this border!'
+  - ''
+  - '&6Hard Border: &f15000x15000'
+  - '&7&oGather resources beyond the soft border!'
+  - '&7&oAreas outside the soft border can reset'
+  - ''
+  - '&6Notable Locations:'
+  - '&e- Spawn &f(0,0)'
+  - '&e- Nether Hub Portal &f(?,?)'
+  - '&e- Shopping District &f(?,?)'
+  - '&7--------------------------------------'
+
+# Map Command Output
+map:
+  - '&6[&eBee Box&6] &e> &fClick me to view the online map!'
+
+# Map URL
+map-link:
+  - 'https://map.beeboxmc.com'
+
+# Map Hover Event
+map-hover:
+  - '&7&oRedirects to https://map.beeboxmc.com'
