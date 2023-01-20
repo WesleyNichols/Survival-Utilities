@@ -34,6 +34,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.registerCommand(HelpCommand.getCommand, new HelpCommand());
         this.registerCommand(InfoCommand.getCommand, new InfoCommand());
         this.registerCommand(MapCommand.getCommand, new MapCommand());
+        this.registerCommand(PortalCommand.getCommand, new PortalCommand());
         this.registerCommand(ReloadCommand.getCommand, new ReloadCommand());
         this.registerCommand(RulesCommand.getCommand, new RulesCommand());
 

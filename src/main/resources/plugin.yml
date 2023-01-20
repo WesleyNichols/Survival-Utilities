@@ -31,6 +31,10 @@ commands:
     description: Displays map link
     usage: /map
     aliases: [maps, world, worlds, view, views, link, links, overview, webmap, webmaps]
+  portal:
+    description: Provides coordinates to build a linkable Nether Portal
+    usage: /portal
+    aliases: [nether, overworld]
   reload:
     description: Reload configs
     usage: /survivalutilities:reload
