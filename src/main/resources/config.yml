@@ -1,21 +1,21 @@
 # Help Command Output
 help:
-  - '&7------------ &6[ &f&lBee Box Help &6] &7------------'
+  - '&8&l------------ &e&l[ &f&lBee Box Help &e&l] &8&l------------'
   - '&6/apply: &fApply to become a member'
   - '&6/co inspect: &fToggle the block inspector &7&o(Donor only)'
   - '&6/cosmetic: &fChange your active cosmetics &7&o(Donor only)'
   - '&6/discord: &fJoin our discord'
   - '&6/discord link: &fLink your Minecraft and Discord Accounts'
-  - '&6/info: &fView map information'
+  - '&6/info: &fView general information'
   - '&6/map: &fView the online map'
   - '&6/rules: &fRead the server''s rules'
   - '&6/shop: &fView the store'
   - '&6/vote: &fVote for Bee Box MC'
-  - '&7-----------------------------------------'
+  - '&8&l---------------------------------------'
 
 # Info Command Output
 info:
-  - '&7---------- &6[ &f&lSeason 1 Info &6] &7----------'
+  - '&8&l---------- &e&l[ &f&lSeason 1 Info &e&l] &8&l----------'
   - '&6Soft Border: &f10000x10000'
   - '&7&oBuild safely within this border!'
   - ''
@@ -24,27 +24,27 @@ info:
   - '&7&oAreas outside the soft border can reset'
   - ''
   - '&6Notable Locations:'
-  - '&e- Spawn &f(0,0)'
-  - '&e- Nether Hub Portal &f(?,?)'
-  - '&e- Shopping District &f(?,?)'
-  - '&7--------------------------------------'
+  - '&eâ†’ Spawn &f(0,0)'
+  - '&eâ†’ Nether Hub Portal &f(?,?)'
+  - '&eâ†’ Shopping District &f(?,?)'
+  - '&8&l------------------------------------'
 
 # Map Command Output
 map: '&6[&eBee Box&6] &e> &fClick me to view the online map!'
 
 # Map URL
-map-link: 'https://map.beeboxmc.com'
+map-link: https://map.beeboxmc.com
 
 # Map Hover Event
 map-hover: '&7&oRedirects to https://map.beeboxmc.com'
 
 # Rules Command Output
 rules:
-  - '&7------------ &6[ &f&lBee Box Rules &6] &7------------'
-  - '&6Don''t build within 100 blocks of spawn &7&o(without permission)'
-  - '&6Don''t take items that aren''t yours'
-  - '&6Don''t build in other people''s bases'
-  - '&6Don''t PvP unless both parties consent'
+  - '&8&l---------- &e&l[ &f&lBee Box Rules &e&l] &8&l----------'
+  - '&eâ†’ &6Don''t build within 100 blocks of spawn &7&o(without permission)'
+  - '&eâ†’ &6Don''t take items that aren''t yours'
+  - '&eâ†’ &6Don''t build in other people''s bases'
+  - '&eâ†’ &6Don''t PvP &7&o(unless both parties consent)'
   - ''
   - '&e&oIf you see any malicious behavior please alert a staff member'
-  - '&7-----------------------------------------'
+  - '&8&l------------------------------------'
