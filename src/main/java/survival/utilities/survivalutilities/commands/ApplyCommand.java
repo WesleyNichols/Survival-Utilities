@@ -20,6 +20,9 @@ public class ApplyCommand implements CommandExecutor {
     public static String getCommand = "apply";
     private static final String form = "https://forms.gle/q1oyyqkPhz9d12YZ7";
 
+    /**
+     Allows players to apply to become a member
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (label.equalsIgnoreCase(getCommand) && sender instanceof Player) {

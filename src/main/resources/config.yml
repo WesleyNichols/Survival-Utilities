@@ -1,16 +1,16 @@
 # Help Command Output
 help:
   - '&7------------ &6[ &f&lBee Box Help &6] &7------------'
-  - ''
   - '&6/apply: &fApply to become a member'
   - '&6/co inspect: &fToggle the block inspector &7&o(Donor only)'
+  - '&6/cosmetic: &fChange your active cosmetics &7&o(Donor only)'
   - '&6/discord: &fJoin our discord'
   - '&6/discord link: &fLink your Minecraft and Discord Accounts'
   - '&6/info: &fView map information'
   - '&6/map: &fView the online map'
   - '&6/rules: &fRead the server''s rules'
+  - '&6/shop: &fView the store'
   - '&6/vote: &fVote for Bee Box MC'
-  - ''
   - '&7-----------------------------------------'
 
 # Info Command Output
@@ -30,13 +30,21 @@ info:
   - '&7--------------------------------------'
 
 # Map Command Output
-map:
-  - '&6[&eBee Box&6] &e> &fClick me to view the online map!'
+map: '&6[&eBee Box&6] &e> &fClick me to view the online map!'
 
 # Map URL
-map-link:
-  - 'https://map.beeboxmc.com'
+map-link: 'https://map.beeboxmc.com'
 
 # Map Hover Event
-map-hover:
-  - '&7&oRedirects to https://map.beeboxmc.com'
+map-hover: '&7&oRedirects to https://map.beeboxmc.com'
+
+# Rules Command Output
+rules:
+  - '&7------------ &6[ &f&lBee Box Rules &6] &7------------'
+  - '&6Don''t build within 100 blocks of spawn &7&o(without permission)'
+  - '&6Don''t take items that aren''t yours'
+  - '&6Don''t build in other people''s bases'
+  - '&6Don''t PvP unless both parties consent'
+  - ''
+  - '&e&oIf you see any malicious behavior please alert a staff member'
+  - '&7-----------------------------------------'

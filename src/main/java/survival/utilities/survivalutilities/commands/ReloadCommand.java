@@ -14,6 +14,9 @@ public class ReloadCommand implements CommandExecutor {
 
     public static String getCommand = "reload";
 
+    /**
+     Reloads the config of the plugin
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.hasPermission("survivalutil.reload")) {

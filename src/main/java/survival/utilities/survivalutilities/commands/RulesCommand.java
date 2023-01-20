@@ -10,17 +10,17 @@ import survival.utilities.survivalutilities.SurvivalUtilities;
 
 import java.util.List;
 
-public class InfoCommand implements CommandExecutor {
+public class RulesCommand implements CommandExecutor {
 
-    public static String getCommand = "info";
+    public static String getCommand = "rules";
 
     /**
-     Returns basic info such as map dimensions, spawn and shopping district locations, etc
+     Displays the rules to sender
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            List<String> infoText = SurvivalUtilities.getInstance().getConfig().getStringList("info");
+            List<String> infoText = SurvivalUtilities.getInstance().getConfig().getStringList("rules");
             for (String line : infoText) {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
             }

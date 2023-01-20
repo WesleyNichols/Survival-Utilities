@@ -35,6 +35,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.registerCommand(InfoCommand.getCommand, new InfoCommand());
         this.registerCommand(MapCommand.getCommand, new MapCommand());
         this.registerCommand(ReloadCommand.getCommand, new ReloadCommand());
+        this.registerCommand(RulesCommand.getCommand, new RulesCommand());
 
         new AFKManager().runTaskTimer(this, 20L, 40L);
     }

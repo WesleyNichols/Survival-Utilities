@@ -17,6 +17,9 @@ public class AcceptCommand implements CommandExecutor{
     public static String getCommand = "accept";
     private final Mojang mojang = new Mojang().connect();
 
+    /**
+     Accepts or unaccepts a user
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (label.equalsIgnoreCase(getCommand) && !(args.length == 1) && sender instanceof Player) {

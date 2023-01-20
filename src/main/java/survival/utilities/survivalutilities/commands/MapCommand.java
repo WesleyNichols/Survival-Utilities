@@ -16,6 +16,9 @@ public class MapCommand implements CommandExecutor {
 
     public static String getCommand = "map";
 
+    /**
+     Displays a link to the map
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {

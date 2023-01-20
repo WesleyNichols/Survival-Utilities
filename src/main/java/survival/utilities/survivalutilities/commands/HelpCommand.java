@@ -14,6 +14,9 @@ public class HelpCommand implements CommandExecutor {
 
     public static String getCommand = "help";
 
+    /**
+     Displays helpful commands
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {

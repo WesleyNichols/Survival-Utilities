@@ -35,3 +35,7 @@ commands:
     description: Reload configs
     usage: /survivalutilities:reload
     permission: survivalutil.reload
+  rules:
+    description: Displays the rules of the server
+    usage: /rules
+    aliases: [rule]

@@ -13,6 +13,9 @@ public class HealCommand implements CommandExecutor {
 
     public static String getCommand = "heal";
 
+    /**
+     Heals a provided target by restoring health and hunger
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (label.equalsIgnoreCase(getCommand) && sender instanceof Player player && args.length > 0) {
