@@ -8,6 +8,7 @@ help:
   - '&6/discord link: &fLink your Minecraft and Discord Accounts'
   - '&6/info: &fView general information'
   - '&6/map: &fView the online map'
+  - '&6/portal: &fProvides coordinates to build a linkable portal'
   - '&6/rules: &fRead the server''s rules'
   - '&6/shop: &fView the store'
   - '&6/vote: &fVote for Bee Box MC'
