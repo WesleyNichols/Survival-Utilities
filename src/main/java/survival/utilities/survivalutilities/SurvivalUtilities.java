@@ -20,7 +20,8 @@ public final class SurvivalUtilities extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        
+
+        saveConfig();
         reloadConfigs();
 
         this.registerEvent(new PlayerManager());
@@ -60,6 +61,6 @@ public final class SurvivalUtilities extends JavaPlugin {
     public void reloadConfigs() {
         CustomConfig.load("player.yml");
         CustomConfig.save();
-        saveConfig();
+        reloadConfig();
     }
 }
