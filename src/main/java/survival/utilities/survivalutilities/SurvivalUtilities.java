@@ -61,7 +61,6 @@ public final class SurvivalUtilities extends JavaPlugin {
     public void reloadConfigs() {
         CustomConfig.load("player.yml");
         CustomConfig.save();
-        reloadConfig();
         saveConfig();
     }
 }
