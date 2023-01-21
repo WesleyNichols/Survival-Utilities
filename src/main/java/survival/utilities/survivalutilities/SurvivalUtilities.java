@@ -20,8 +20,7 @@ public final class SurvivalUtilities extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        saveConfig();
+        
         reloadConfigs();
 
         this.registerEvent(new PlayerManager());
