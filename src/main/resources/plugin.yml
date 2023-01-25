@@ -15,6 +15,10 @@ commands:
     description: Apply to join as a member
     usage: /apply
     permission: survivalutil.apply
+  broadcast:
+    description: Broadcasts a message to the server
+    usage: /broadcast <message>
+    permission: survivalutil.broadcast
   heal:
     description: Restore health and hunger of a player
     usage: /heal <player>

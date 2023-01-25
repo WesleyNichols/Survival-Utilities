@@ -1,6 +1,9 @@
 package survival.utilities.survivalutilities;
 
+import me.quantiom.advancedvanish.shaded.adventure.platform.facet.Facet;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import survival.utilities.survivalutilities.commands.*;
@@ -8,9 +11,12 @@ import survival.utilities.survivalutilities.config.CustomConfig;
 import survival.utilities.survivalutilities.listeners.AFKListener;
 import survival.utilities.survivalutilities.listeners.DenyInteract;
 import survival.utilities.survivalutilities.managers.AFKManager;
+import survival.utilities.survivalutilities.managers.ChatManager;
 import survival.utilities.survivalutilities.managers.PlayerManager;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 
 public final class SurvivalUtilities extends JavaPlugin {
@@ -21,15 +27,18 @@ public final class SurvivalUtilities extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        saveConfig();
+        saveDefaultConfig();
         reloadConfigs();
+        initChatManager();
 
         this.registerEvent(new PlayerManager());
         this.registerEvent(new DenyInteract());
         this.registerEvent(new AFKListener());
+        this.registerEvent(new ChatManager());
 
         this.registerCommand(AcceptCommand.getCommand, new AcceptCommand());
         this.registerCommand(ApplyCommand.getCommand, new ApplyCommand());
+        this.registerCommand(BroadcastCommand.getCommand, new BroadcastCommand());
         this.registerCommand(HealCommand.getCommand, new HealCommand());
         this.registerCommand(HelpCommand.getCommand, new HelpCommand());
         this.registerCommand(InfoCommand.getCommand, new InfoCommand());
@@ -62,5 +71,14 @@ public final class SurvivalUtilities extends JavaPlugin {
         CustomConfig.load("player.yml");
         CustomConfig.save();
         reloadConfig();
+        ChatManager.initConfigVars();
+    }
+
+    public void initChatManager() {
+        if(Bukkit.getOnlinePlayers().size() > 0) {
+            for(Player player: Bukkit.getOnlinePlayers()) {
+                ChatManager.initTimes(player.getUniqueId());
+            }
+        }
     }
 }

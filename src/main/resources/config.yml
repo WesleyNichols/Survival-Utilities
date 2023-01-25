@@ -49,3 +49,15 @@ rules:
   - ''
   - '&e&oIf you see any malicious behavior please alert a staff member'
   - '&8&l------------------------------------'
+
+# Max Average Time Between Chats
+chat_spam_threshold: 0.75
+
+# Max Time Between Chats Before Time Array is Reset
+chat_time_expiry: 3
+
+# Amount of Time to Mute Player
+mute_time: 3
+
+# Max Messages Before Mute
+max_messages: 3
