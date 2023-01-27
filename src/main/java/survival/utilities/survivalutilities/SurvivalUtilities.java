@@ -29,7 +29,7 @@ public final class SurvivalUtilities extends JavaPlugin {
 
         saveDefaultConfig();
         reloadConfigs();
-        initChatManager();
+        initChatSpam();
 
         this.registerEvent(new PlayerManager());
         this.registerEvent(new DenyInteract());
@@ -71,14 +71,14 @@ public final class SurvivalUtilities extends JavaPlugin {
         CustomConfig.load("player.yml");
         CustomConfig.save();
         reloadConfig();
-        ChatManager.initConfigVars();
     }
 
-    public void initChatManager() {
+    public void initChatSpam() {
         if(Bukkit.getOnlinePlayers().size() > 0) {
             for(Player player: Bukkit.getOnlinePlayers()) {
-                ChatManager.initTimes(player.getUniqueId());
+                ChatManager.initChatManager(player.getUniqueId());
             }
         }
+        ChatManager.initConfigVars();
     }
 }
