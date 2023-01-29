@@ -22,7 +22,7 @@ public class AcceptCommand implements CommandExecutor{
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (label.equalsIgnoreCase(getCommand) && !(args.length == 1) && sender instanceof Player) {
+        if (label.equalsIgnoreCase(getCommand) && !(args.length == 0) && sender instanceof Player) {
             if (sender.hasPermission("survivalutil.accept")) {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 

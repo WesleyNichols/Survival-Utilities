@@ -1,6 +1,6 @@
 # Help Command Output
 help:
-  - '&8&l------------ &e&l[ &f&lBee Box Help &e&l] &8&l------------'
+  - '<dark_grey><bold>-------- << - <yellow>[ <white>Bee Box Help</white> ] <dark_grey>- >> --------'
   - '&6/apply: &fApply to become a member'
   - '&6/co inspect: &fToggle the block inspector &7&o(Donor only)'
   - '&6/cosmetic: &fChange your active cosmetics &7&o(Donor only)'
@@ -12,7 +12,7 @@ help:
   - '&6/rules: &fRead the server''s rules'
   - '&6/shop: &fView the store'
   - '&6/vote: &fVote for Bee Box MC'
-  - '&8&l---------------------------------------'
+  - '&8&l----------------------------------------'
 
 # Info Command Output
 info:
