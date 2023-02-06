@@ -34,7 +34,7 @@ commands:
   map:
     description: Displays map link
     usage: /map
-    aliases: [maps, world, worlds, view, views, link, links, overview, webmap, webmaps]
+    aliases: [maps, world, worlds, view, views, link, links, overview, webmap, webmaps, dynmap, dynmaps]
   portal:
     description: Provides coordinates to build a linkable Nether Portal
     usage: /portal

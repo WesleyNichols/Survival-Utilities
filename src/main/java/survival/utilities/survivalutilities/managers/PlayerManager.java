@@ -22,7 +22,7 @@ import java.util.logging.Level;
 public class PlayerManager implements Listener {
 
     private static final LuckPerms luckPerms = LuckPermsProvider.get();
-    private static final FileConfiguration config = CustomConfig.get();
+    public static FileConfiguration config;
 
     public static boolean playerStatus(OfflinePlayer player) {
         UUID uuid = player.getUniqueId();
@@ -78,7 +78,7 @@ public class PlayerManager implements Listener {
         }, 120);
 
         //  Accept player if needed
-        if(playerStatus(player) && CustomConfig.get().getInt(player.getUniqueId().toString()) == 0){
+        if(playerStatus(player) && config.getInt(player.getUniqueId().toString()) == 0){
             playerAccept(player);
         }
     }

@@ -1,6 +1,5 @@
 package survival.utilities.survivalutilities;
 
-import me.quantiom.advancedvanish.shaded.adventure.platform.facet.Facet;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
@@ -9,15 +8,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import survival.utilities.survivalutilities.commands.*;
 import survival.utilities.survivalutilities.config.CustomConfig;
 import survival.utilities.survivalutilities.listeners.AFKListener;
+import survival.utilities.survivalutilities.listeners.ArmorPoseListener;
 import survival.utilities.survivalutilities.listeners.DenyInteract;
 import survival.utilities.survivalutilities.managers.AFKManager;
 import survival.utilities.survivalutilities.managers.ChatManager;
 import survival.utilities.survivalutilities.managers.PlayerManager;
+import survival.utilities.survivalutilities.util.ArmorPoseUtil;
 
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
-
 
 public final class SurvivalUtilities extends JavaPlugin {
 
@@ -35,6 +33,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.registerEvent(new DenyInteract());
         this.registerEvent(new AFKListener());
         this.registerEvent(new ChatManager());
+        this.registerEvent(new ArmorPoseListener());
 
         this.registerCommand(AcceptCommand.getCommand, new AcceptCommand());
         this.registerCommand(ApplyCommand.getCommand, new ApplyCommand());
@@ -70,6 +69,10 @@ public final class SurvivalUtilities extends JavaPlugin {
     public void reloadConfigs() {
         CustomConfig.load("player.yml");
         CustomConfig.save();
+        PlayerManager.config = CustomConfig.get();
+        CustomConfig.load("armor_stand.yml");
+        CustomConfig.save();
+        ArmorPoseUtil.config = CustomConfig.get();
         reloadConfig();
     }
 
