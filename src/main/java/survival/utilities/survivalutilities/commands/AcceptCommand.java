@@ -15,6 +15,7 @@ import static survival.utilities.survivalutilities.managers.PlayerManager.*;
 public class AcceptCommand implements CommandExecutor{
 
     public static String getCommand = "accept";
+    public static String getSecondaryCommand = "unaccept";
     private final Mojang mojang = new Mojang().connect();
 
     /**
@@ -22,51 +23,54 @@ public class AcceptCommand implements CommandExecutor{
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (label.equalsIgnoreCase(getCommand) && !(args.length == 0) && sender instanceof Player) {
-            if (sender.hasPermission("survivalutil.accept")) {
-                OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+        if (!(sender instanceof Player)) {
+            sender = Bukkit.getServer().getConsoleSender();
+        } else if(!sender.hasPermission("survivalutil.accept")) {
+            return false;
+        }
 
-                try {
-                    mojang.getUUIDOfUsername(target.getName());
-                } catch (Exception e) {
-                    sender.sendMessage(ChatColor.RED + target.getName() + " is not a valid user!");
+        if (label.equalsIgnoreCase(getCommand) || label.equalsIgnoreCase(getSecondaryCommand) && !(args.length == 0)) {
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+            try {
+                mojang.getUUIDOfUsername(target.getName());
+            } catch (Exception e) {
+                sender.sendMessage(ChatColor.RED + target.getName() + " is not a valid user!");
+                return true;
+            }
+
+            //  region Accept
+            if (label.equalsIgnoreCase("accept")) {
+                if (playerStatus(target)) {
+                    sender.sendMessage(ChatColor.RED + target.getName() + " is already accepted!");
                     return true;
                 }
 
-                //  region Accept
-                if (label.equalsIgnoreCase("accept")) {
-                    if (playerStatus(target)) {
-                        sender.sendMessage(ChatColor.RED + target.getName() + " is already accepted!");
-                        return true;
-                    }
-
-                    if (playerAccept(target)) {
-                        sender.sendMessage(ChatColor.GOLD + "You accepted " + ChatColor.YELLOW + target.getName() + ChatColor.GOLD + " to the server!");
-                        return true;
-                    } else {
-                        sender.sendMessage(ChatColor.DARK_RED + "Failed to accept user " + target.getName() + "! If you believe this is an error please contact a developer.");
-                        return false;
-                    }
+                if (playerAccept(target)) {
+                    sender.sendMessage(ChatColor.GOLD + "You accepted " + ChatColor.YELLOW + target.getName() + ChatColor.GOLD + " to the server!");
+                    return true;
+                } else {
+                    sender.sendMessage(ChatColor.DARK_RED + "Failed to accept user " + target.getName() + "! If you believe this is an error please contact a developer.");
+                    return false;
                 }
-                // endregion
-
-                //  region Unaccept
-                if (label.equalsIgnoreCase("unaccept")) {
-                    if (!playerStatus(target)) {
-                        sender.sendMessage(ChatColor.RED + target.getName() + " is already not accepted!");
-                        return true;
-                    }
-
-                    if (playerUnaccept(target)) {
-                        sender.sendMessage(ChatColor.GOLD + "You unaccepted " + ChatColor.YELLOW + target.getName() + ChatColor.GOLD + " from the server!");
-                        return true;
-                    } else {
-                        sender.sendMessage(ChatColor.DARK_RED + "Failed to unaccept user " + target.getName() + "! If you believe this is an error please contact a developer.");
-                        return false;
-                    }
-                }
-                //  endregion
             }
+            // endregion
+
+            //  region Unaccept
+            if (label.equalsIgnoreCase("unaccept")) {
+                if (!playerStatus(target)) {
+                    sender.sendMessage(ChatColor.RED + target.getName() + " is already not accepted!");
+                    return true;
+                }
+
+                if (playerUnaccept(target)) {
+                    sender.sendMessage(ChatColor.GOLD + "You unaccepted " + ChatColor.YELLOW + target.getName() + ChatColor.GOLD + " from the server!");
+                    return true;
+                } else {
+                    sender.sendMessage(ChatColor.DARK_RED + "Failed to unaccept user " + target.getName() + "! If you believe this is an error please contact a developer.");
+                    return false;
+                }
+            }
+                //  endregion
         }
         return false;
     }

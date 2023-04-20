@@ -80,7 +80,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.19.3-R0.1-SNAPSHOT</version>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -104,7 +104,7 @@
         <dependency>
             <groupId>me.quantiom</groupId>
             <artifactId>advancedvanish</artifactId>
-            <version>1.2.2</version>
+            <version>1.2.5</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

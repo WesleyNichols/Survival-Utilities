@@ -3,6 +3,7 @@ package survival.utilities.survivalutilities;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import survival.utilities.survivalutilities.commands.*;
@@ -45,6 +46,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.registerCommand(PortalCommand.getCommand, new PortalCommand());
         this.registerCommand(ReloadCommand.getCommand, new ReloadCommand());
         this.registerCommand(RulesCommand.getCommand, new RulesCommand());
+        this.registerCommand(SlimeCommand.getCommand, new SlimeCommand());
 
         new AFKManager().runTaskTimer(this, 20L, 40L);
     }

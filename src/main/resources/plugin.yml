@@ -47,3 +47,8 @@ commands:
     description: Displays the rules of the server
     usage: /rules
     aliases: [rule]
+  slime:
+    description: Checks whether the current chunk is a slime chunk
+    usage: /slime
+    permission: survivalutil.slime
+    aliases: [ isslime ]
