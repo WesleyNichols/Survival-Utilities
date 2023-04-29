@@ -55,7 +55,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         registerCommand("slime", new SlimeCommand());
         registerCommand("unaccept", new AcceptCommand());
 
-        new AFKManager().runTaskTimer(this, 20L, 60L);
+        new AFKManager().runTaskTimer(this, 20L, 40L);
     }
 
     public void registerEvent(Listener event) {
