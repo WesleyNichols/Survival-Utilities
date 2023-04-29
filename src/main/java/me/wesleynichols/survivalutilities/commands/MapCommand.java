@@ -1,4 +1,4 @@
-package survival.utilities.survivalutilities.commands;
+package me.wesleynichols.survivalutilities.commands;
 
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -9,17 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import survival.utilities.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 
 import java.util.Objects;
 
 public class MapCommand implements CommandExecutor {
 
-    public static String getCommand = "map";
-
-    /**
-     Displays a link to the map
-     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {

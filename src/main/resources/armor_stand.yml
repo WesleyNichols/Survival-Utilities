@@ -1,7 +1,3 @@
-messages:
-  action-bar-message: "&6Pose: "
-
-# You can add new poses!
 armor:
   standPose:
     1:

@@ -1,7 +1,7 @@
-package survival.utilities.survivalutilities.listeners;
+package me.wesleynichols.survivalutilities.listeners;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,13 +20,13 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 public class DenyInteract implements Listener {
 
     public static void applyMessage(Player player) {
-        player.sendActionBar(Component.text(ChatColor.RED + "Use /apply to get started!"));
+        player.sendActionBar(Component.text("Use /apply to get started!", NamedTextColor.RED));
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if(player.hasPermission("group.default")) {
+        if (player.hasPermission("group.default")) {
             event.setCancelled(true);
             applyMessage(player);
         }
@@ -34,10 +34,10 @@ public class DenyInteract implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if(event.getEntityType() == EntityType.PLAYER){
+        if (event.getEntityType() == EntityType.PLAYER){
             Player player = ((Player) event.getEntity()).getPlayer();
             assert player != null;
-            if(player.hasPermission("group.default")) {
+            if (player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
         }
@@ -46,7 +46,7 @@ public class DenyInteract implements Listener {
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if(player.hasPermission("group.default")) {
+        if (player.hasPermission("group.default")) {
             event.setCancelled(true);
             applyMessage(player);
         }
@@ -54,10 +54,10 @@ public class DenyInteract implements Listener {
 
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event) {
-        if(event.getTarget() instanceof Player){
+        if (event.getTarget() instanceof Player){
             Player player = ((Player) event.getTarget()).getPlayer();
             assert player != null;
-            if(player.hasPermission("group.default")) {
+            if (player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
         }
@@ -65,10 +65,10 @@ public class DenyInteract implements Listener {
 
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent event) {
-        if(event.getEntityType() == EntityType.PLAYER){
+        if (event.getEntityType() == EntityType.PLAYER){
             Player player = ((Player) event.getEntity()).getPlayer();
             assert player != null;
-            if(player.hasPermission("group.default")) {
+            if (player.hasPermission("group.default")) {
                 event.setCancelled(true);
             }
         }
@@ -77,30 +77,30 @@ public class DenyInteract implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if(player.hasPermission("group.default")) {
+        if (player.hasPermission("group.default")) {
             event.setCancelled(true);
             applyMessage(player);
         }
     }
 
     @EventHandler
-    public void onPickup(PlayerAttemptPickupItemEvent event) {
+    public void onItemPickup(PlayerAttemptPickupItemEvent event) {
         Player player = event.getPlayer();
-        if(player.hasPermission("group.default")) {
+        if (player.hasPermission("group.default")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPickupArrow(PlayerPickupArrowEvent event) {
+    public void onArrowPickup(PlayerPickupArrowEvent event) {
         Player player = event.getPlayer();
-        if(player.hasPermission("group.default")) {
+        if (player.hasPermission("group.default")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlace(BlockPlaceEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         if (player.hasPermission("group.default")) {
             event.setCancelled(true);
@@ -110,10 +110,10 @@ public class DenyInteract implements Listener {
 
     @EventHandler
     public void preventDamage(EntityDamageByEntityEvent event) {
-        if(event.getDamager().getType() == EntityType.PLAYER){
+        if (event.getDamager().getType() == EntityType.PLAYER){
             Player player = ((Player) event.getDamager()).getPlayer();
             assert player != null;
-            if(player.hasPermission("group.default")) {
+            if (player.hasPermission("group.default")) {
                 event.setCancelled(true);
                 applyMessage(player);
             }

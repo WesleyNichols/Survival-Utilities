@@ -1,15 +1,15 @@
-package survival.utilities.survivalutilities.managers;
+package me.wesleynichols.survivalutilities.managers;
 
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.TabPlayer;
 import me.neznamy.tab.api.TablistFormatManager;
 import me.quantiom.advancedvanish.util.AdvancedVanishAPI;
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import survival.utilities.survivalutilities.SurvivalUtilities;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -36,9 +36,9 @@ public class AFKManager extends BukkitRunnable {
             String prefix = formatManager.getCustomPrefix(tabPlayer);
 
             if (isAFK(player) && !AdvancedVanishAPI.INSTANCE.isPlayerVanished(player)) {
-                player.sendActionBar(Component.text(ChatColor.GRAY + "You're currently AFK"));
+                player.sendActionBar(Component.text("You're currently AFK", NamedTextColor.GRAY));
                 if (prefix == null) {   //  Is AFK, but hasn't been marked in tablist
-                    formatManager.setPrefix(tabPlayer, ChatColor.GRAY + "");
+                    formatManager.setPrefix(tabPlayer, NamedTextColor.GRAY + "");
                 }
             } else {
                 if (prefix != null) {   //  No longer AFK, but hasn't been updated in tablist

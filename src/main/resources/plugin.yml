@@ -1,16 +1,15 @@
 name: SurvivalUtilities
 version: '${project.version}'
-main: survival.utilities.survivalutilities.SurvivalUtilities
+main: me.wesleynichols.survivalutilities.SurvivalUtilities
 depend: [TAB]
 api-version: 1.19
 authors: [ wmn ]
-description: Custom additions for survival server
+description: Lightweight utilities for hosting a Survival server
 commands:
   accept:
     description: Accept/unaccept players as members
-    usage: /accept <player>, /unaccept <player>
+    usage: /accept <player>
     permission: survivalutil.accept
-    aliases: [unaccept]
   apply:
     description: Apply to join as a member
     usage: /apply
@@ -26,29 +25,28 @@ commands:
   help:
     description: Displays help menu
     usage: /help
-    aliases: [assist, assistance, aid, aids, support, supports, guide, guidance]
   info:
     description: Display map info
     usage: /info
-    aliases: [information, detail, details, find, finds, finding, item, items]
+    aliases: [information]
   map:
     description: Displays map link
     usage: /map
-    aliases: [maps, world, worlds, view, views, link, links, overview, webmap, webmaps, dynmap, dynmaps]
+    aliases: [dynmap]
   portal:
     description: Provides coordinates to build a linkable Nether Portal
     usage: /portal
-    aliases: [nether, overworld]
   reload:
-    description: Reload configs
     usage: /survivalutilities:reload
     permission: survivalutil.reload
   rules:
-    description: Displays the rules of the server
+    description: Displays server rules
     usage: /rules
-    aliases: [rule]
   slime:
     description: Checks whether the current chunk is a slime chunk
     usage: /slime
     permission: survivalutil.slime
-    aliases: [ isslime ]
+  unaccept:
+    description: Accept/unaccept players as members
+    usage: /unaccept <player>
+    permission: survivalutil.unaccept

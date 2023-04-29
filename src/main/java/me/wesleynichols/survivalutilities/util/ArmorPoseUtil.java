@@ -1,12 +1,10 @@
-package survival.utilities.survivalutilities.util;
+package me.wesleynichols.survivalutilities.util;
 
 import io.papermc.paper.math.Rotations;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ArmorStand;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ArmorPoseUtil {
 
@@ -21,6 +19,7 @@ public class ArmorPoseUtil {
         List<Integer> headPose = getHeadPose(pose);
         List<Integer> leftLegPose = getLeftLegPose(pose);
         List<Integer> rightLegPose = getRightLegPose(pose);
+
         if (getArms(pose)) {
             List<Integer> leftArmPose = getLeftArmPose(pose);
             List<Integer> rightArmPose = getRightArmPose(pose);
@@ -32,14 +31,11 @@ public class ArmorPoseUtil {
             armorStand.setRightArmRotations(Rotations.ofDegrees(339, 0, 15));
             armorStand.setArms(false);
         }
+
         armorStand.setBodyRotations(Rotations.ofDegrees(bodyPose.get(0), bodyPose.get(1), bodyPose.get(2)));
         armorStand.setHeadRotations(Rotations.ofDegrees(headPose.get(0), headPose.get(1), headPose.get(2)));
         armorStand.setLeftLegRotations(Rotations.ofDegrees(leftLegPose.get(0), leftLegPose.get(1), leftLegPose.get(2)));
         armorStand.setRightLegRotations(Rotations.ofDegrees(rightLegPose.get(0), rightLegPose.get(1), rightLegPose.get(2)));
-    }
-
-    public static String getActionBarMessage() {
-        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString("messages.action-bar-message")));
     }
 
     public static boolean getArms(String pose) {

@@ -1,34 +1,30 @@
-package survival.utilities.survivalutilities.listeners;
+package me.wesleynichols.survivalutilities.listeners;
 
+import me.wesleynichols.survivalutilities.util.ArmorPoseUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import survival.utilities.survivalutilities.util.ArmorPoseUtil;
 
 public class ArmorPoseListener implements Listener {
 
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
-        Entity entity = event.getEntity();
-        if(entity instanceof ArmorStand armorStand) {
+        if(event.getEntity() instanceof ArmorStand armorStand) {
             armorStand.addScoreboardTag("1");
         }
     }
 
     @EventHandler
     public void onArmorStandClick(PlayerInteractAtEntityEvent event) {
-        Entity entity = event.getRightClicked();
-        if (entity instanceof ArmorStand armorStand) {
+        if (event.getRightClicked() instanceof ArmorStand armorStand) {
             Player player = event.getPlayer();
-            if (!player.isSneaking()) return;
-
-            if (!player.hasPermission("survivalutil.armorpose")) return;
+            if (!player.isSneaking() || !player.hasPermission("survivalutil.armorpose")) return;
 
             event.setCancelled(true);
 
@@ -48,7 +44,7 @@ public class ArmorPoseListener implements Listener {
             armorStand.addScoreboardTag(pose);
             ArmorPoseUtil.setPose(armorStand, pose);
 
-            player.sendActionBar(Component.text(ArmorPoseUtil.getActionBarMessage() + pose));
+            player.sendActionBar(Component.text("Pose: " + pose, NamedTextColor.GOLD));
         }
     }
 }

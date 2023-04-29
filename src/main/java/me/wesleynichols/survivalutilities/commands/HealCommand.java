@@ -1,8 +1,8 @@
-package survival.utilities.survivalutilities.commands;
+package me.wesleynichols.survivalutilities.commands;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,28 +11,30 @@ import org.jetbrains.annotations.NotNull;
 
 public class HealCommand implements CommandExecutor {
 
-    public static String getCommand = "heal";
-
     /**
-     Heals a provided target by restoring health and hunger
+     Restore health and hunger on command
+
+     @param args Player to heal, assumes sender if no target provided
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (label.equalsIgnoreCase(getCommand) && sender instanceof Player player) {
-            Player target = player;
-            if (args.length > 0) {
+        // Assume sender is target
+        if (sender instanceof Player target) {
+            // Re-assign target if valid arg
+            if (args.length == 1) {
                 if (Bukkit.getOnlinePlayers().stream().anyMatch(e -> e.getName().equalsIgnoreCase(args[0]))) {
                     target = Bukkit.getPlayer(args[0]);
                 } else {
-                    player.sendMessage(Component.text(ChatColor.DARK_GREEN + args[0] + " is not a valid target!"));
+                    target.sendMessage(Component.text(args[0] + " is not a valid target!", NamedTextColor.DARK_GREEN));
                     return false;
                 }
             }
+            // Heal target
             assert target != null;
             target.setHealth(20);
             target.setFoodLevel(20);
-            player.sendMessage(Component.text(ChatColor.GREEN + "Healed " + target.getName()));
-            if (target != player) { target.sendMessage(Component.text(ChatColor.GREEN + "You were healed by " + player.getName())); }
+            target.sendMessage(Component.text("Healed " + target.getName(), NamedTextColor.GREEN));
+            if (target != sender) { target.sendMessage(Component.text("Healed by " + target.getName(), NamedTextColor.GREEN)); }
             return true;
         }
         return false;

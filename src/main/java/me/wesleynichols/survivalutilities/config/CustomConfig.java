@@ -1,10 +1,10 @@
-package survival.utilities.survivalutilities.config;
+package me.wesleynichols.survivalutilities.config;
 
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import survival.utilities.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 
 import java.io.*;
 import java.util.logging.Level;

@@ -1,13 +1,10 @@
-package survival.utilities.survivalutilities.util;
-
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+package me.wesleynichols.survivalutilities.util;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static survival.utilities.survivalutilities.managers.ChatManager.*;
+import static me.wesleynichols.survivalutilities.managers.ChatManager.*;
 
 public class ChatPlayer {
 

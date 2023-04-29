@@ -1,10 +1,10 @@
-package survival.utilities.survivalutilities.managers;
+package me.wesleynichols.survivalutilities.managers;
 
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
-import survival.utilities.survivalutilities.SurvivalUtilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,9 +15,8 @@ public class PageManager {
     public static int commandsPerPage = 8;
     private static final String miniTextBack = "<green><click:run_command:/help num><hover:show_text:'<grey>Click to go to page num'> << </hover></click></green>";
     private static final String miniTextNext = "<green><click:run_command:/help num><hover:show_text:'<grey>Click to go to page num'> >> </hover></click></green>";
-    public static String chatPrefix = ChatColor.GOLD + "[" + ChatColor.YELLOW + "BeeBox" + ChatColor.GOLD + "]" + ChatColor.YELLOW + " > " + ChatColor.WHITE;
 
-    private static final List<Component> errorMessage = new ArrayList<>(Collections.singleton(Component.text(chatPrefix + ChatColor.RED + "That page doesn't exist!")));
+    private static final List<Component> errorMessage = new ArrayList<>(Collections.singleton(SurvivalUtilities.getInstance().getPrefix().append(Component.text("That page doesn't exist!", NamedTextColor.RED))));
 
     public static List<Component> getPage(int pageNumber, String configName) {
         if (pageNumber < 1) {
