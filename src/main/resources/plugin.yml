@@ -3,7 +3,7 @@ version: '${project.version}'
 main: me.wesleynichols.survivalutilities.SurvivalUtilities
 depend: [TAB]
 api-version: 1.19
-authors: [ wmn ]
+authors: [ WesleyNichols, TheSheepGoesBa ]
 description: Lightweight utilities for server members
 commands:
   accept:
