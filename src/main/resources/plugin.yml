@@ -4,7 +4,7 @@ main: me.wesleynichols.survivalutilities.SurvivalUtilities
 depend: [TAB]
 api-version: 1.19
 authors: [ wmn ]
-description: Lightweight utilities for hosting a Survival server
+description: Lightweight utilities for server members
 commands:
   accept:
     description: Accept/unaccept players as members
