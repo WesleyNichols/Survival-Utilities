@@ -32,7 +32,6 @@ commands:
   map:
     description: Displays map link
     usage: /map
-    aliases: [dynmap]
   portal:
     description: Provides coordinates to build a linkable Nether Portal
     usage: /portal

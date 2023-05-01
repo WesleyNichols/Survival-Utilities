@@ -18,7 +18,6 @@ public class AFKManager extends BukkitRunnable {
 
     private final TabAPI tabAPI = TabAPI.getInstance();
     private static final TablistFormatManager formatManager = TabAPI.getInstance().getTablistFormatManager();
-
     private static final long MovementThreshold = 600000L;  //  10 minutes
     private static final HashMap<UUID, Long> players = new HashMap<>();
 
@@ -38,7 +37,7 @@ public class AFKManager extends BukkitRunnable {
             if (isAFK(player) && !AdvancedVanishAPI.INSTANCE.isPlayerVanished(player)) {
                 player.sendActionBar(Component.text("You're currently AFK", NamedTextColor.GRAY));
                 if (prefix == null) {   //  Is AFK, but hasn't been marked in tablist
-                    formatManager.setPrefix(tabPlayer, NamedTextColor.GRAY + "");
+                    formatManager.setPrefix(tabPlayer, "&7");
                 }
             } else {
                 if (prefix != null) {   //  No longer AFK, but hasn't been updated in tablist
