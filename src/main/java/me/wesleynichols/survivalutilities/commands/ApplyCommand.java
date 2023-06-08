@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ApplyCommand implements CommandExecutor {
 
-    private static final String form = "https://forms.gle/q1oyyqkPhz9d12YZ7";
+    private static final String form = "https://forms.gle/8L98ueJkJ6Znscb19";
 
     /**
      Opens a book explaining how to apply to the server
