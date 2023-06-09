@@ -20,7 +20,7 @@ info:
   - '&6Soft Border: &f10000x10000'
   - '&7&oBuild your home within this area!'
   - ''
-  - '&6Hard Border: &f20000x20000'
+  - '&6Hard Border: &f15000x15000'
   - '&7&oHarvest resources beyond the soft border!'
   - '&7&oAreas beyond the soft border may reset'
   - ''
