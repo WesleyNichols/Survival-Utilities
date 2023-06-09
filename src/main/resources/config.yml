@@ -11,6 +11,7 @@ help:
   - '&6/portal: &fProvides coordinates to build a linkable portal'
   - '&6/rules: &fRead the server''s rules'
   - '&6/shop: &fView the store'
+  - '&6/slime: &fChecks if a chunk spawns slimes &7&0(Donor only)'
   - '&8&l----------------------------------------'
 
 # Info Command Output
