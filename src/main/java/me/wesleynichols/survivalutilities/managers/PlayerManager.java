@@ -1,7 +1,6 @@
 package me.wesleynichols.survivalutilities.managers;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
-import me.wesleynichols.survivalutilities.config.CustomConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.luckperms.api.LuckPerms;
@@ -11,20 +10,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.util.logging.Level;
 
 public class PlayerManager implements Listener {
 
     private static final LuckPerms luckPerms = LuckPermsProvider.get();
     public static FileConfiguration config;
+    private static File file;
+    private static Plugin plugin;
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        loadConfig();
         Player player = event.getPlayer();
         //  Display welcome message
         Bukkit.getScheduler().runTaskLater(SurvivalUtilities.getInstance(), () -> {
@@ -44,12 +49,13 @@ public class PlayerManager implements Listener {
     }
 
     public static boolean playerStatus(OfflinePlayer player) {
+        loadConfig();
         return config.contains(player.getUniqueId().toString());
     }
 
     public static boolean playerAccept(OfflinePlayer player) {
+        loadConfig();
         try {
-            CustomConfig.load("player.yml");
             if (player.isOnline()) {
                 luckPerms.getUserManager().modifyUser(player.getUniqueId(), u -> {
                     u.data().add(Node.builder("group.player").build());
@@ -61,7 +67,7 @@ public class PlayerManager implements Listener {
             } else {
                 config.set(player.getUniqueId().toString(), 0);
             }
-            CustomConfig.save();
+            config.save(file);
             return true;
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to accept user " + player.getName() + "!");
@@ -70,15 +76,21 @@ public class PlayerManager implements Listener {
     }
 
     public static boolean playerUnaccept(OfflinePlayer player) {
+        loadConfig();
         try {
-            CustomConfig.load("player.yml");
             luckPerms.getUserManager().modifyUser(player.getUniqueId(), u -> u.data().clear());
             config.set(player.getUniqueId().toString(), null);
-            CustomConfig.save();
+            config.save(file);
             return true;
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to un-accept user " + player.getName() + "!");
             return false;
         }
+    }
+
+    private static void loadConfig() {
+        plugin = Bukkit.getServer().getPluginManager().getPlugin("SurvivalUtilities");
+        file = new File(plugin.getDataFolder(), "player.yml");
+        config = YamlConfiguration.loadConfiguration(file);
     }
 }
