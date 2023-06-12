@@ -49,6 +49,7 @@ public class PlayerManager implements Listener {
 
     public static boolean playerAccept(OfflinePlayer player) {
         try {
+            CustomConfig.load("player.yml");
             if (player.isOnline()) {
                 luckPerms.getUserManager().modifyUser(player.getUniqueId(), u -> {
                     u.data().add(Node.builder("group.player").build());
@@ -70,6 +71,7 @@ public class PlayerManager implements Listener {
 
     public static boolean playerUnaccept(OfflinePlayer player) {
         try {
+            CustomConfig.load("player.yml");
             luckPerms.getUserManager().modifyUser(player.getUniqueId(), u -> u.data().clear());
             config.set(player.getUniqueId().toString(), null);
             CustomConfig.save();
