@@ -20,10 +20,10 @@ public class ChatPlayer {
 
     public void checkThreshold() {
         double sumDiff = 0;
-        for (int i = 0; i < maxMessages - 1; i++) {
+        for (int i = 0; i < maxMessages - 2; i++) {
             sumDiff += chatTimes.get(i + 1) - chatTimes.get(i);
         }
-        if (sumDiff/4D < threshold) {
+        if (sumDiff/(maxMessages-1D) < threshold) {
             // UUID and the time their "mute" ends
             preventChat.put(playerUUID, System.currentTimeMillis()/1000D + muteTime + numTimesMuted);
             numTimesMuted++;
