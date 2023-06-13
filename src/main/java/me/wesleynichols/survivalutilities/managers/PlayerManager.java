@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class PlayerManager implements Listener {
@@ -39,6 +40,7 @@ public class PlayerManager implements Listener {
             } else {
                 player.sendActionBar(Component.text("Welcome, ", NamedTextColor.GOLD).append(Component.text(player.getName(), NamedTextColor.YELLOW).append(Component.text("!", NamedTextColor.GOLD))));
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.5F, 0.69F);
+                player.sendMessage(Component.text("Welcome to Bee Box MC!").color(NamedTextColor.GOLD).append(Component.text(" Our server runs on a greylist system, you won't able to interact with the world until you become a member. Use /apply to get started!").color(NamedTextColor.YELLOW)));
             }
         }, 120);
 
@@ -63,7 +65,11 @@ public class PlayerManager implements Listener {
                 });
                 config.set(player.getUniqueId().toString(), 1);
                 Bukkit.getScheduler().runTaskLater(SurvivalUtilities.getInstance(),
-                        () -> Bukkit.broadcast(Component.text(player.getName() + " was accepted as a member!", NamedTextColor.GREEN)), 40);
+                        () -> {
+                            Bukkit.broadcast(Component.text(player.getName() + " was accepted as a member!", NamedTextColor.GREEN));
+                            Objects.requireNonNull(player.getPlayer()).sendMessage(Component.text("Congratulations!").color(NamedTextColor.GOLD).append(Component.text(" You've been accepted as a member - be sure to read /rules, /information, and visit /map to learn the ins and outs of Bee Box MC!").color(NamedTextColor.YELLOW)));
+                        }
+                        , 40);
             } else {
                 config.set(player.getUniqueId().toString(), 0);
             }
