@@ -36,13 +36,13 @@ public class AFKManager extends BukkitRunnable {
 
             if (isAFK(player) && !AdvancedVanishAPI.INSTANCE.isPlayerVanished(player)) {
                 player.sendActionBar(Component.text("You're currently AFK", NamedTextColor.GRAY));
-                if (prefix == null) {   //  Is AFK, but hasn't been marked in tablist
-                    formatManager.setPrefix(tabPlayer, "&7");
-                }
+//                if (prefix == null) {   //  Is AFK, but hasn't been marked in tablist
+//                    formatManager.setPrefix(tabPlayer, "&7");
+//                }
             } else {
                 if (prefix != null) {   //  No longer AFK, but hasn't been updated in tablist
                     player.sendActionBar(Component.text(""));
-                    formatManager.resetPrefix(tabPlayer);
+//                    formatManager.resetPrefix(tabPlayer);
                 }
             }
         }
