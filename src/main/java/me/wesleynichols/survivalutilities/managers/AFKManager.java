@@ -2,7 +2,7 @@ package me.wesleynichols.survivalutilities.managers;
 
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.TabPlayer;
-import me.neznamy.tab.api.TablistFormatManager;
+import me.neznamy.tab.api.tablist.TabListFormatManager;
 import me.quantiom.advancedvanish.util.AdvancedVanishAPI;
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class AFKManager extends BukkitRunnable {
 
     private final TabAPI tabAPI = TabAPI.getInstance();
-    private static final TablistFormatManager formatManager = TabAPI.getInstance().getTablistFormatManager();
+    private static final TabListFormatManager formatManager = TabAPI.getInstance().getTabListFormatManager();
     private static final long MovementThreshold = 600000L;  //  10 minutes
     private static final HashMap<UUID, Long> players = new HashMap<>();
 
@@ -32,6 +32,8 @@ public class AFKManager extends BukkitRunnable {
             }
 
             TabPlayer tabPlayer = tabAPI.getPlayer(player.getUniqueId());
+            assert formatManager != null;
+            assert tabPlayer != null;
             String prefix = formatManager.getCustomPrefix(tabPlayer);
 
             if (isAFK(player) && !AdvancedVanishAPI.INSTANCE.isPlayerVanished(player)) {
