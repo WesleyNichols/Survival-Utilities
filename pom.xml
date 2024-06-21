@@ -96,9 +96,9 @@
         </dependency>
         <!-- TAB -->
         <dependency>
-            <groupId>me.neznamy</groupId>
-            <artifactId>tab-api</artifactId>
-            <version>4.0.0</version>
+            <groupId>com.github.NEZNAMY</groupId>
+            <artifactId>TAB-API</artifactId>
+            <version>4.1.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
