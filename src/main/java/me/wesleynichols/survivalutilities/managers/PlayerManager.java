@@ -1,14 +1,12 @@
 package me.wesleynichols.survivalutilities.managers;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import me.wesleynichols.survivalutilities.util.ConfigUtil;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.node.Node;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -32,16 +30,18 @@ public class PlayerManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         loadConfig();
         Player player = event.getPlayer();
-        //  Display welcome message
+
+        //  Greet new or returning players
         Bukkit.getScheduler().runTaskLater(SurvivalUtilities.getInstance(), () -> {
             if (player.hasPlayedBefore()) {
-                player.sendActionBar(Component.text("Welcome back ", NamedTextColor.GOLD).append(Component.text(player.getName(), NamedTextColor.YELLOW).append(Component.text("!", NamedTextColor.GOLD))));
-                player.playSound(player.getLocation(), Sound.BLOCK_BEEHIVE_ENTER, 1.5F, 1.0F);
+                player.sendActionBar(ConfigUtil.formatMessage(plugin.getConfig().getString("greet-returning"), player));
+                ConfigUtil.playConfigSound(Objects.requireNonNull(plugin.getConfig().getConfigurationSection("returning-sound")), player);
             } else {
-                player.sendActionBar(Component.text("Welcome, ", NamedTextColor.GOLD).append(Component.text(player.getName(), NamedTextColor.YELLOW).append(Component.text("!", NamedTextColor.GOLD))));
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.5F, 0.69F);
-                player.sendMessage(Component.text("Welcome to Bee Box MC!").color(NamedTextColor.GOLD).append(Component.text(" Our server runs on a greylist system, you won't able to interact with the world until you become a member. Use /apply to get started!").color(NamedTextColor.YELLOW)));
-                Bukkit.broadcast(Component.text(player.getName() + " has joined Bee Box MC for the first time!", NamedTextColor.GREEN));
+                ConfigUtil.sendFormattedMessage(plugin.getConfig().getStringList("welcome-message"), player);
+                Bukkit.broadcast(ConfigUtil.formatMessage(plugin.getConfig().getString("welcome-global"), player));
+
+                player.sendActionBar(ConfigUtil.formatMessage(plugin.getConfig().getString("greet-new"), player));
+                ConfigUtil.playConfigSound(Objects.requireNonNull(plugin.getConfig().getConfigurationSection("new-sound")), player);
             }
         }, 120);
 
@@ -67,8 +67,8 @@ public class PlayerManager implements Listener {
                 config.set(player.getUniqueId().toString(), 1);
                 Bukkit.getScheduler().runTaskLater(SurvivalUtilities.getInstance(),
                         () -> {
-                            Bukkit.broadcast(Component.text(player.getName() + " was accepted as a member!", NamedTextColor.GREEN));
-                            Objects.requireNonNull(player.getPlayer()).sendMessage(Component.text("Congratulations!").color(NamedTextColor.GOLD).append(Component.text(" You've been accepted as a member - be sure to read /rules, /information, and visit /map to learn the ins and outs of Bee Box MC!").color(NamedTextColor.YELLOW)));
+                            Bukkit.broadcast(ConfigUtil.formatMessage(plugin.getConfig().getString("accepted-global"), player.getPlayer()));
+                            Objects.requireNonNull(player.getPlayer()).sendMessage(ConfigUtil.formatMessage(plugin.getConfig().getString("accepted-player"), player.getPlayer()));
                         }
                         , 40);
             } else {

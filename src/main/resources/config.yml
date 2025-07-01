@@ -1,53 +1,70 @@
-# Help Command Output
+chat-prefix: '&6[&eBee Box&6] &7> '
+
+welcome-player:
+  - '&6Welcome to Bee Box MC!'
+  - '&eOur server uses a greylist, you can''t interact with the world until you become a member.'
+  - '&eUse /apply to get started!'
+
+welcome-global: '&a%player% has joined Bee Box MC for the first time!'
+
+greet-new: '&6Welcome, &e%player%&6!'
+new-sound:
+  sound: entity.player.levelup
+  volume: 1.5
+  pitch: 0.69
+
+greet-returning: '&6Welcome back, &e%player%&6!'
+returning-sound:
+  sound: block.beehive.enter
+  volume: 1.5
+  pitch: 1.0
+
+accepted-player: '&6Congratulations! &eYou''re accepted as a member - use /rules, /information, and /map to learn more about Bee Box MC!'
+accepted-global: '&a%player% was accepted as a member!'
+
 help:
   - '<dark_grey><bold>-------- << - <yellow>[ <white>Bee Box Help</white> ] <dark_grey>- >> --------'
   - '&6/apply: &fApply to become a member'
   - '&6/co inspect: &fToggle the block inspector &7&o(Donor only)'
   - '&6/cosmetic: &fChange your active cosmetics &7&o(Donor only)'
   - '&6/discord: &fJoin our discord'
-  - '&6/discord link: &fLink your Minecraft and Discord Accounts'
-  - '&6/info: &fView general information'
+  - '&6/discord link: &fLink your Minecraft and Discord accounts'
+  - '&6/info: &fView useful information'
   - '&6/map: &fView the online map'
-  - '&6/portal: &fProvides coordinates to build a linkable portal'
+  - '&6/portal: &fGet coordinates to build linking portals'
   - '&6/rules: &fRead the server''s rules'
-  - '&6/shop: &fView the store'
-  - '&6/slime: &fChecks if a chunk spawns slimes &7&o(Donor only)'
+  - '&6/shop: &fVisit the store'
+  - '&6/slime: &fCheck if a chunk spawns slimes &7&o(Donor only)'
   - '&8&l----------------------------------------'
 
-# Info Command Output
 info:
-  - '&8&l---------- &e&l[ &f&lSeason 1 Info &e&l] &8&l----------'
-  - '&6Soft Border: &f10000x10000'
+  - '&8&l---------- &e&l[ &f&lSeason Info &e&l] &8&l----------'
+  - '&6Soft Border: &f15000x15000'
   - '&7&oBuild your home within this area!'
   - ''
-  - '&6Hard Border: &f15000x15000'
-  - '&7&oHarvest resources beyond the soft border!'
-  - '&7&oAreas beyond the soft border may reset'
+  - '&6Hard Border: &f20000x20000'
+  - '&7&oHarvest resources beyond the soft border.'
+  - '&7&oAreas beyond the soft border may reset!'
   - ''
   - '&6Notable Locations:'
-  - '&e→ Spawn &f(0,79,0)'
-  - '&e→ Nether Hub Portal &f(0,90,0)'
+  - '&e→ Spawn &f(0,0)'
+  - '&e→ Nether Hub &f(?,?)'
   - '&e→ Shopping District &f(?,?)'
   - '&8&l------------------------------------'
 
-# Map Command Output
-map: '&6[&eBee Box&6] &e> &fClick me to view the online map!'
-
-# Map URL
+map: '&bClick me &fto view the online map!'
 map-link: https://map.beeboxmc.com
-
-# Map Hover Event
 map-hover: '&7&oRedirects to https://map.beeboxmc.com'
 
-# Rules Command Output
 rules:
   - '&8&l---------- &e&l[ &f&lBee Box Rules &e&l] &8&l----------'
-  - '&e→ &6Don''t build within 100 blocks of spawn &7&o(without permission)'
-  - '&e→ &6Don''t take items that aren''t yours'
-  - '&e→ &6Don''t build in other people''s bases'
-  - '&e→ &6Don''t PvP &7&o(unless both parties consent)'
+  - '&e→ &6Build at least 100 blocks away from spawn'
+  - '&e→ &6Only take what belongs to you'
+  - '&e→ &6Respect space — build away from others'
+  - '&e→ &6Only engage in PvP with mutual consent'
   - ''
-  - '&e&oIf you see any malicious behavior please alert a staff member'
+  - '&e&oIf you see any malicious behavior please alert staff!'
+  - '&e&oStaff are denoted by &fMods&1*&e&o, &fAdmins&6*&e&o, and &fDevs&5*&e&o.'
   - '&8&l------------------------------------'
 
 # Max Average Time Between Chats

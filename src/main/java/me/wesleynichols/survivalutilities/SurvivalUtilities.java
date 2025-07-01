@@ -9,6 +9,7 @@ import me.wesleynichols.survivalutilities.managers.AFKManager;
 import me.wesleynichols.survivalutilities.managers.ChatManager;
 import me.wesleynichols.survivalutilities.managers.PlayerManager;
 import me.wesleynichols.survivalutilities.util.ArmorPoseUtil;
+import me.wesleynichols.survivalutilities.util.ConfigUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -77,7 +78,7 @@ public final class SurvivalUtilities extends JavaPlugin {
     }
 
     public void initChatSpam() {
-        if(Bukkit.getOnlinePlayers().size() > 0) {
+        if(!Bukkit.getOnlinePlayers().isEmpty()) {
             for(Player player: Bukkit.getOnlinePlayers()) {
                 ChatManager.initChatManager(player.getUniqueId());
             }
@@ -86,10 +87,6 @@ public final class SurvivalUtilities extends JavaPlugin {
     }
 
     public TextComponent getPrefix() {
-        return Component.text("", NamedTextColor.WHITE)
-                .append(Component.text("[", NamedTextColor.GOLD)
-                        .append(Component.text("BeeBox", NamedTextColor.YELLOW)
-                                .append(Component.text("]", NamedTextColor.GOLD)
-                                        .append(Component.text(" > ", NamedTextColor.YELLOW)))));
+        return (TextComponent) ConfigUtil.formatMessage(plugin.getConfig().getString("chat-prefix"));
     }
 }

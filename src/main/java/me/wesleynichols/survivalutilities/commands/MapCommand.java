@@ -19,11 +19,12 @@ public class MapCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
             FileConfiguration config = SurvivalUtilities.getInstance().getConfig();
-            player.sendMessage(LegacyComponentSerializer.legacyAmpersand()
+            player.sendMessage(SurvivalUtilities.getInstance().getPrefix().append(
+                    LegacyComponentSerializer.legacyAmpersand()
                     .deserialize(Objects.requireNonNull(config.getString("map")))
                     .clickEvent(ClickEvent.openUrl(Objects.requireNonNull(config.getString("map-link"))))
                     .hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacyAmpersand()
-                            .deserialize(Objects.requireNonNull(config.getString("map-hover"))))));
+                            .deserialize(Objects.requireNonNull(config.getString("map-hover")))))));
             return true;
         }
         return false;

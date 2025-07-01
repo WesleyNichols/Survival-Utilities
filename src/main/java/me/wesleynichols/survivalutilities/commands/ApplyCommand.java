@@ -37,8 +37,7 @@ public class ApplyCommand implements CommandExecutor {
                                     .decoration(TextDecoration.BOLD, false)
                                     .append(Component.text("  [Click to Apply]", NamedTextColor.DARK_AQUA)
                                             .decoration(TextDecoration.BOLD, true)
-                                            .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form))
-                                    )));
+                                    ))).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form));
             bookmeta.addPages(textComponent);
             book.setItemMeta(bookmeta);
             player.openBook(book);

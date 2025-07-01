@@ -24,7 +24,7 @@ public class PortalCommand implements CommandExecutor {
             Location loc =  player.getLocation().toBlockLocation().multiply(normalWorld ? 1F/8 : 8);
 
             sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
-                    .append(Component.text("To link a portal to this location build and light a portal in the "
+                    .append(Component.text("To link a portal at this location build a portal in the "
                             + (normalWorld ? "Nether" : "Overworld") + " at X:" + loc.getBlockX() + ", Z:" + loc.getBlockZ())));
         }
         return true;
