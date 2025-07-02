@@ -48,6 +48,7 @@ commands:
   smite:
     description: Summon lightning from the heavens to kill a target
     usage: /smite [player]
+    permission: survivalutil.smite
   togglecommand:
     description: Enables or disables a provided command
     usage: /togglecommand <command>
