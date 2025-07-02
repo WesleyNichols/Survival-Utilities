@@ -66,10 +66,6 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>krypton</id>
-            <url>https://repo.kryptonmc.org/releases</url>
-        </repository>
-        <repository>
             <id>repsy</id>
             <name>quantiom</name>
             <url>https://repo.repsy.io/mvn/quantiom/minecraft</url>
@@ -86,7 +82,7 @@
         <dependency>
             <groupId>com.github.SparklingComet</groupId>
             <artifactId>java-mojang-api</artifactId>
-            <version>master-SNAPSHOT</version>
+            <version>-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>net.luckperms</groupId>

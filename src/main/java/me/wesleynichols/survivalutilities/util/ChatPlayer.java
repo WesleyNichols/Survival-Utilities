@@ -19,13 +19,15 @@ public class ChatPlayer {
     }
 
     public void checkThreshold() {
+        if (chatTimes.size() < maxMessages) return; // Prevent out-of-bounds
+
         double sumDiff = 0;
         for (int i = 0; i < maxMessages - 2; i++) {
             sumDiff += chatTimes.get(i + 1) - chatTimes.get(i);
         }
-        if (sumDiff/(maxMessages-1D) < threshold) {
-            // UUID and the time their "mute" ends
-            preventChat.put(playerUUID, System.currentTimeMillis()/1000D + muteTime + numTimesMuted);
+
+        if (sumDiff / (maxMessages - 1D) < threshold) {
+            preventChat.put(playerUUID, System.currentTimeMillis() / 1000D + muteTime + numTimesMuted);
             numTimesMuted++;
         } else {
             chatTimes = new ArrayList<>();
