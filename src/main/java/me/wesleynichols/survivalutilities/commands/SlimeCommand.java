@@ -21,7 +21,13 @@ public class SlimeCommand implements CommandExecutor {
     private final int UPDATE_INTERVAL = 2; // every 2 seconds
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        //  Check if the command is disabled
+        if (!SurvivalUtilities.getInstance().isCommandEnabled("slime")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        }
+
         if (!(sender instanceof Player player)) {
             return false;
         }

@@ -78,3 +78,15 @@ mute_time: 3
 
 # Max Messages Before Mute
 max_messages: 3
+
+enabled-commands:
+  accept: true
+  apply: true
+  heal: true
+  help: true
+  info: true
+  map: true
+  portal: true
+  rules: true
+  slime: true
+  unaccept: true

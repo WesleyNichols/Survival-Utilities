@@ -1,7 +1,9 @@
 package me.wesleynichols.survivalutilities.commands;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +18,13 @@ import java.util.Objects;
 public class MapCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        //  Check if the command is disabled
+        if (!SurvivalUtilities.getInstance().isCommandEnabled("map")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        }
+
         if (sender instanceof Player player) {
             FileConfiguration config = SurvivalUtilities.getInstance().getConfig();
             player.sendMessage(SurvivalUtilities.getInstance().getPrefix().append(

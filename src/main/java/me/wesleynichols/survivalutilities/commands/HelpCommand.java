@@ -1,5 +1,6 @@
 package me.wesleynichols.survivalutilities.commands;
 
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import me.wesleynichols.survivalutilities.managers.PageManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -13,7 +14,13 @@ import org.jetbrains.annotations.NotNull;
 public class HelpCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        //  Check if the command is disabled
+        if (!SurvivalUtilities.getInstance().isCommandEnabled("help")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        }
+
         if (sender instanceof Player) {
             try {
                 for (Component line : PageManager.getPage(args.length > 0 ? Integer.parseInt(args[0]) : 1, "help")) {

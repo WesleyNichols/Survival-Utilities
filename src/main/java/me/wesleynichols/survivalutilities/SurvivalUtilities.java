@@ -56,6 +56,8 @@ public final class SurvivalUtilities extends JavaPlugin {
         registerCommand("slime", new SlimeCommand());
         registerCommand("unaccept", new AcceptCommand());
 
+        registerCommand("togglecommand", new ToggleCommandCommand());
+
         new AFKManager().runTaskTimer(this, 20L, 40L);
     }
 
@@ -63,7 +65,12 @@ public final class SurvivalUtilities extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(event, this);
     }
 
+    public boolean isCommandEnabled(String command) {
+        return getConfig().getBoolean("enabled-commands." + command, true); // Default to true
+    }
+
     public void registerCommand(String command, CommandExecutor executor) {
+        if (!isCommandEnabled(command)) return;
         Objects.requireNonNull(getCommand(command)).setExecutor(executor);
     }
 

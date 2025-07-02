@@ -45,6 +45,10 @@ commands:
     description: Checks whether the current chunk is a slime chunk
     usage: /slime
     permission: survivalutil.slime
+  togglecommand:
+    description: Enables or disables a provided command
+    usage: /togglecommand <command>
+    permission: survivalutil.togglecommand
   unaccept:
     description: Accept/unaccept players as members
     usage: /unaccept <player>

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class ReloadCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (sender instanceof Player player) {
             player.sendMessage(runReload());
         } else {

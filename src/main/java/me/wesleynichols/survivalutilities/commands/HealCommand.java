@@ -1,5 +1,6 @@
 package me.wesleynichols.survivalutilities.commands;
 
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -17,7 +18,13 @@ public class HealCommand implements CommandExecutor {
      @param args Player to heal, assumes sender if no target provided
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        //  Check if the command is disabled
+        if (!SurvivalUtilities.getInstance().isCommandEnabled("heal")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        }
+
         // Assume sender is target
         if (sender instanceof Player target) {
             // Re-assign target if valid arg

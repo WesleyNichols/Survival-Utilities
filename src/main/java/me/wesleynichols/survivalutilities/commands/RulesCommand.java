@@ -1,6 +1,8 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +13,13 @@ import org.jetbrains.annotations.NotNull;
 public class RulesCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        //  Check if the command is disabled
+        if (!SurvivalUtilities.getInstance().isCommandEnabled("rules")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        }
+
         if (sender instanceof Player) {
             for (String line : SurvivalUtilities.getInstance().getConfig().getStringList("rules")) {
                 sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(line));

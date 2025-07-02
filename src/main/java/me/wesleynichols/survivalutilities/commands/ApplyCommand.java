@@ -1,5 +1,6 @@
 package me.wesleynichols.survivalutilities.commands;
 
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -23,7 +24,13 @@ public class ApplyCommand implements CommandExecutor {
      Opens a book explaining how to apply to the server
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        //  Check if the command is disabled
+        if (!SurvivalUtilities.getInstance().isCommandEnabled("apply")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        }
+
         if (sender instanceof Player player) {
             ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
             BookMeta bookmeta = (BookMeta) book.getItemMeta();

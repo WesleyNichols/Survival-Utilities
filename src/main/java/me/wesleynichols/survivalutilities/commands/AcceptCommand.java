@@ -1,5 +1,6 @@
 package me.wesleynichols.survivalutilities.commands;
 
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import me.wesleynichols.survivalutilities.managers.PlayerManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -23,7 +24,16 @@ public class AcceptCommand implements CommandExecutor{
      @param args target player
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        //  Check if the command is disabled
+        if (label.equals("accept") && !SurvivalUtilities.getInstance().isCommandEnabled("accept")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        } else if (label.equals("unaccept") && !SurvivalUtilities.getInstance().isCommandEnabled("unaccept")) {
+            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+            return true;
+        }
+
         if (args.length == 1) {
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
             try {
