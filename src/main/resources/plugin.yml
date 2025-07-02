@@ -45,6 +45,9 @@ commands:
     description: Checks whether the current chunk is a slime chunk
     usage: /slime
     permission: survivalutil.slime
+  smite:
+    description: Summon lightning from the heavens to kill a target
+    usage: /smite [player]
   togglecommand:
     description: Enables or disables a provided command
     usage: /togglecommand <command>

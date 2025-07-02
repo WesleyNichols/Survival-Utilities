@@ -89,4 +89,5 @@ enabled-commands:
   portal: true
   rules: true
   slime: true
+  smite: false
   unaccept: true

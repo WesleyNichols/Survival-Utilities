@@ -54,6 +54,7 @@ public final class SurvivalUtilities extends JavaPlugin {
         registerCommand("reload", new ReloadCommand());
         registerCommand("rules", new RulesCommand());
         registerCommand("slime", new SlimeCommand());
+        registerCommand("smite", new SmiteCommand());
         registerCommand("unaccept", new AcceptCommand());
 
         registerCommand("togglecommand", new ToggleCommandCommand());
