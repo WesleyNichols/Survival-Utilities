@@ -71,7 +71,6 @@ public final class SurvivalUtilities extends JavaPlugin {
     }
 
     public void registerCommand(String command, CommandExecutor executor) {
-        if (!isCommandEnabled(command)) return;
         Objects.requireNonNull(getCommand(command)).setExecutor(executor);
     }
 
