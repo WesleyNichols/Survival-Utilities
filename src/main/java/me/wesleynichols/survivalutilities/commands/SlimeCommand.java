@@ -1,11 +1,11 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.managers.BaseCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -14,54 +14,60 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class SlimeCommand implements CommandExecutor {
+public class SlimeCommand extends BaseCommand {
 
     private final Map<UUID, Integer> activeTasks = new HashMap<>();
-    private final int DURATION = 60; // 1 minute in ticks
-    private final int UPDATE_INTERVAL = 2; // every 2 seconds
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        //  Check if the command is disabled
-        if (!SurvivalUtilities.getInstance().isCommandEnabled("slime")) {
-            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+    protected boolean executeCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Only players can use this command.", NamedTextColor.RED)));
             return true;
         }
 
-        if (!(sender instanceof Player player)) {
-            return false;
-        }
+        final int DURATION_SECONDS = 60; // duration slime display is active
+        final int UPDATE_INTERVAL_SECONDS = 2; // update every 2 seconds
+        final int TICKS_PER_SECOND = 20;
 
         UUID uuid = player.getUniqueId();
+
         if (activeTasks.containsKey(uuid)) {
-            // Cancel the task if the command is run while already active
             Bukkit.getScheduler().cancelTask(activeTasks.remove(uuid));
-            player.sendMessage(SurvivalUtilities.getInstance().getPrefix().append(Component.text("Slime chunk display disabled")));
+            player.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Slime chunk display disabled")));
         } else {
-            // Start the repeating task
+            int durationTicks = DURATION_SECONDS * TICKS_PER_SECOND;
+            int updateIntervalTicks = UPDATE_INTERVAL_SECONDS * TICKS_PER_SECOND;
+
             int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalUtilities.getInstance(), new Runnable() {
-                private int ticks = 0;
+                int elapsedTicks = 0;
 
                 @Override
                 public void run() {
-                    if (!player.isOnline()) {
+                    Player p = Bukkit.getPlayer(uuid);
+                    if (p == null || !p.isOnline()) {
                         Bukkit.getScheduler().cancelTask(activeTasks.remove(uuid));
                         return;
                     }
 
-                    boolean isSlime = player.getChunk().isSlimeChunk();
-                    Component msg = Component.text(isSlime ? "Slime Chunk" : "Not a Slime Chunk", isSlime ? NamedTextColor.GREEN : NamedTextColor.RED);
-                    player.sendActionBar(msg);
+                    boolean isSlimeChunk = p.getChunk().isSlimeChunk();
+                    Component msg = Component.text(isSlimeChunk ? "Slime Chunk" : "Not a Slime Chunk",
+                            isSlimeChunk ? NamedTextColor.GREEN : NamedTextColor.RED);
+                    p.sendActionBar(msg);
 
-                    ticks += UPDATE_INTERVAL * 20;
-                    if (ticks >= DURATION * 20) {
+                    elapsedTicks += updateIntervalTicks;
+                    if (elapsedTicks >= durationTicks) {
                         Bukkit.getScheduler().cancelTask(activeTasks.remove(uuid));
-                        player.sendMessage(SurvivalUtilities.getInstance().getPrefix().append(Component.text("Slime chunk display disabled")));
+                        p.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                                .append(Component.text("Slime chunk display disabled")));
                     }
                 }
-            }, 0L, UPDATE_INTERVAL * 20);
+            }, 0L, updateIntervalTicks);
+
             activeTasks.put(uuid, taskId);
-            player.sendMessage(SurvivalUtilities.getInstance().getPrefix().append(Component.text("Slime chunk display enabled for " + DURATION + " seconds")));
+            player.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Slime chunk display enabled (" + DURATION_SECONDS + "s)")));
         }
 
         return true;

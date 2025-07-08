@@ -12,62 +12,96 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ChatManager implements Listener {
 
-    public static final HashMap<UUID, ChatPlayer> chatPlayers = new HashMap<>();
-    public static final HashMap<UUID, Double> preventChat = new HashMap<>();
-    public static double threshold;
-    public static double resetArrThreshold;
-    public static int muteTime;
-    public static int maxMessages;
+    private final Map<UUID, ChatPlayer> chatPlayers = new HashMap<>();
+    private final Map<UUID, Double> muteUntil = new HashMap<>();
 
-    public static void initChatManager(UUID player) {
-        chatPlayers.put(player, new ChatPlayer(player));
+    private double threshold;
+    private double resetThreshold;
+    private int muteTime;
+    private int maxMessages;
+
+    private final SurvivalUtilities plugin;
+
+    public ChatManager(SurvivalUtilities plugin) {
+        this.plugin = plugin;
+        reload();
     }
 
-    public static void initConfigVars() {
-        threshold = SurvivalUtilities.getInstance().getConfig().getDouble("chat_spam_threshold");
-        resetArrThreshold = SurvivalUtilities.getInstance().getConfig().getDouble("chat_time_expiry");
-        muteTime = SurvivalUtilities.getInstance().getConfig().getInt("mute_time");
-        maxMessages = SurvivalUtilities.getInstance().getConfig().getInt("max_messages");
+    public void reload() {
+        this.threshold = plugin.getConfig().getDouble("chat_spam_threshold");
+        this.resetThreshold = plugin.getConfig().getDouble("chat_time_expiry");
+        this.muteTime = plugin.getConfig().getInt("mute_time");
+        this.maxMessages = plugin.getConfig().getInt("max_messages");
+    }
+
+    public boolean isMuted(UUID uuid) {
+        return muteUntil.containsKey(uuid);
+    }
+
+    public void mutePlayer(UUID uuid, int strikes) {
+        muteUntil.put(uuid, currentTime() + muteTime + strikes);
+    }
+
+    public void unmutePlayer(UUID uuid) {
+        muteUntil.remove(uuid);
+    }
+
+    public double getTimeLeft(UUID uuid) {
+        return muteUntil.getOrDefault(uuid, 0.0) - currentTime();
+    }
+
+    private double currentTime() {
+        return System.currentTimeMillis() / 1000D;
+    }
+
+    public ChatPlayer getOrCreatePlayer(UUID uuid) {
+        return chatPlayers.computeIfAbsent(uuid, id -> new ChatPlayer(id, this));
     }
 
     @EventHandler
     public void onPlayerChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        UUID playerUUID = player.getUniqueId();
-        ChatPlayer chatPlayer = chatPlayers.get(playerUUID);
+        UUID uuid = player.getUniqueId();
+        ChatPlayer chatPlayer = getOrCreatePlayer(uuid);
 
-        if (preventChat.containsKey(playerUUID)) {
-            double timeLeft = preventChat.get(playerUUID) - System.currentTimeMillis()/1000D;
-            if (chatPlayer.checkMuteTime(timeLeft)) {
-                player.sendMessage(SurvivalUtilities.getInstance().getPrefix().append(Component.text("Chat disabled for " + ((int)timeLeft + 1) + "s!")));
+        if (isMuted(uuid)) {
+            double timeLeft = getTimeLeft(uuid);
+            if (chatPlayer.handleMuteExpiration(timeLeft)) {
+                player.sendMessage(plugin.getPrefix().append(Component.text("Chat disabled for " + ((int) timeLeft + 1) + "s!")));
                 event.setCancelled(true);
                 return;
             }
         }
 
-        chatPlayer.checkMessage();
+        chatPlayer.recordMessage();
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        UUID player = event.getPlayer().getUniqueId();
-        chatPlayers.put(player, new ChatPlayer(player));
+        getOrCreatePlayer(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        UUID player = event.getPlayer().getUniqueId();
-        chatPlayers.remove(player);
+        UUID uuid = event.getPlayer().getUniqueId();
+        chatPlayers.remove(uuid);
+        muteUntil.remove(uuid);
     }
 
     @EventHandler
     public void onDisconnectSpam(PlayerKickEvent event) {
-        if(event.getCause().equals(PlayerKickEvent.Cause.SPAM)) {
+        if (event.getCause() == PlayerKickEvent.Cause.SPAM) {
             event.setCancelled(true);
         }
     }
+
+    // Getters for ChatPlayer
+    public double getThreshold() { return threshold; }
+    public double getResetThreshold() { return resetThreshold; }
+    public int getMaxMessages() { return maxMessages; }
 }

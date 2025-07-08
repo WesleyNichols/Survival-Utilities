@@ -19,6 +19,7 @@ returning-sound:
   volume: 1.5
   pitch: 1.0
 
+apply-form: 'https://forms.gle/8L98ueJkJ6Znscb19'
 accepted-player: '&6Congratulations! &eYou''re accepted as a member - use /rules, /information, and /map to learn more about Bee Box MC!'
 accepted-global: '&a%player% was accepted as a member!'
 
@@ -54,7 +55,6 @@ info:
 
 map: '&bClick me &fto view the online map!'
 map-link: https://map.beeboxmc.com
-map-hover: '&7&oRedirects to https://map.beeboxmc.com'
 
 rules:
   - '&8&l---------- &e&l[ &f&lBee Box Rules &e&l] &8&l----------'
@@ -79,9 +79,13 @@ mute_time: 3
 # Max Messages Before Mute
 max_messages: 3
 
+# AFK threshold (in seconds), defaults to 10 minutes (600 seconds)
+afk: 600
+
 enabled-commands:
   accept: true
   apply: true
+  broadcast: true
   heal: true
   help: true
   info: true

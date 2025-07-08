@@ -1,6 +1,7 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.managers.BaseCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -8,7 +9,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,40 +16,41 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
 
-public class ApplyCommand implements CommandExecutor {
+public class ApplyCommand extends BaseCommand {
 
-    private static final String form = "https://forms.gle/8L98ueJkJ6Znscb19";
-
-    /**
-     Opens a book explaining how to apply to the server
-     */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        //  Check if the command is disabled
-        if (!SurvivalUtilities.getInstance().isCommandEnabled("apply")) {
-            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+    protected boolean executeCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Only players can use this command.", NamedTextColor.RED)));
             return true;
         }
 
-        if (sender instanceof Player player) {
-            ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-            BookMeta bookmeta = (BookMeta) book.getItemMeta();
-            bookmeta.setAuthor("");
-            bookmeta.setTitle("");
-            TextComponent textComponent = Component.text("\n   Apply to Join\n\n", NamedTextColor.BLACK)
-                    .decoration(TextDecoration.BOLD, true)
-                    .append(Component.text(" ✧  ✦  ✧  ✪  ✧  ✦  ✧\n\n", NamedTextColor.DARK_PURPLE)
-                            .decoration(TextDecoration.BOLD, false)
-                            .append(Component.text("Staff will review your application as soon as possible - once approved you're ready to play!\n\n", NamedTextColor.BLACK)
-                                    .decoration(TextDecoration.BOLD, false)
-                                    .append(Component.text("  [Click to Apply]", NamedTextColor.DARK_AQUA)
-                                            .decoration(TextDecoration.BOLD, true)
-                                    ))).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, form));
-            bookmeta.addPages(textComponent);
-            book.setItemMeta(bookmeta);
-            player.openBook(book);
+        String formUrl = SurvivalUtilities.getInstance().getConfig().getString("apply-form");
+
+        if (formUrl == null || formUrl.isEmpty()) {
+            player.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Application form URL is not set in the config.", NamedTextColor.RED)));
             return true;
         }
-        return false;
+
+        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+        BookMeta bookmeta = (BookMeta) book.getItemMeta();
+        bookmeta.setAuthor("");
+        bookmeta.setTitle("");
+
+        TextComponent textComponent = Component.text("\n   Apply to Join\n\n", NamedTextColor.BLACK)
+                .decoration(TextDecoration.BOLD, true)
+                .append(Component.text(" ✧  ✦  ✧  ✪  ✧  ✦  ✧\n\n", NamedTextColor.DARK_PURPLE)
+                        .decoration(TextDecoration.BOLD, false)
+                        .append(Component.text("Staff will review your application as soon as possible - once approved you're ready to play!\n\n", NamedTextColor.BLACK)
+                                .append(Component.text("  [Click to Apply]", NamedTextColor.DARK_AQUA)
+                                        .decoration(TextDecoration.BOLD, true))))
+                                        .clickEvent(ClickEvent.openUrl(formUrl));
+
+        bookmeta.addPages(textComponent);
+        book.setItemMeta(bookmeta);
+        player.openBook(book);
+        return true;
     }
 }

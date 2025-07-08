@@ -1,35 +1,32 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.managers.BaseCommand;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class ReloadCommand implements CommandExecutor {
+import java.util.logging.Level;
+
+public class ReloadCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (sender instanceof Player player) {
-            player.sendMessage(runReload());
-        } else {
-            Bukkit.getServer().getConsoleSender().sendMessage(runReload());
-        }
+    protected boolean executeCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        sender.sendMessage(reloadConfigWithStatusMessage());
         return true;
     }
 
-    public TextComponent runReload() {
+    public Component reloadConfigWithStatusMessage() {
         try {
             SurvivalUtilities.getInstance().reloadConfigs();
+            return SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("SurvivalUtilities config reloaded!", NamedTextColor.GREEN));
         } catch (Exception e) {
-            return Component.text("[SurvivalUtilities] Failed to reload configs!", NamedTextColor.RED);
+            SurvivalUtilities.getInstance().getLogger().log(Level.SEVERE, "SurvivalUtilities failed to reload config", e);
+            return SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("SurvivalUtilities failed to reload config!", NamedTextColor.RED));
         }
-        return Component.text("[SurvivalUtilities] Configs reloaded!", NamedTextColor.GREEN);
     }
-
 }

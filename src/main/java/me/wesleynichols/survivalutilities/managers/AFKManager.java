@@ -10,79 +10,100 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class AFKManager extends BukkitRunnable {
 
-    private final TabAPI tabAPI = TabAPI.getInstance();
-    private static final TabListFormatManager formatManager = TabAPI.getInstance().getTabListFormatManager();
-    private static final long MovementThreshold = 600_000L;  // 10 minutes
+    private final SurvivalUtilities plugin;
+    private final TabAPI tabAPI;
+    private final TabListFormatManager formatManager;
 
-    private static final HashMap<UUID, Long> players = new HashMap<>();
-    private static final HashMap<UUID, Boolean> afkStatus = new HashMap<>();
+    private long movementThreshold;
+    private static final Component AFK_ENTER_MSG = Component.text("You're now AFK", NamedTextColor.GRAY);
+    private static final Component AFK_EXIT_MSG = Component.text("You're no longer AFK", NamedTextColor.GRAY);
+    private static final Component AFK_STATUS_MSG = Component.text("You're currently AFK", NamedTextColor.GRAY);
+    private static final String AFK_PREFIX = "§7";
 
+    private final Map<UUID, Long> lastActivity = new HashMap<>();
+    private final Set<UUID> afkPlayers = new HashSet<>();
+
+    public AFKManager(SurvivalUtilities plugin) {
+        this.plugin = plugin;
+        this.tabAPI = TabAPI.getInstance();
+        this.formatManager = tabAPI.getTabListFormatManager();
+
+        reload();
+    }
+
+    public void reload() {
+        // Config is in seconds, convert to milliseconds (× 1000)
+        long thresholdInSeconds = plugin.getConfig().getLong("afk", 600); // 600s default = 10 mins
+        this.movementThreshold = thresholdInSeconds * 1000L;
+    }
+
+    @Override
     public void run() {
-        if (!SurvivalUtilities.getInstance().isEnabled()) {
-            this.cancel();
+        if (!plugin.isEnabled()) {
+            cancel();
+            return;
         }
 
-        for (UUID uuid : new HashMap<>(players).keySet()) {
+        long now = System.currentTimeMillis();
+        Set<UUID> toRemove = new HashSet<>();
+
+        for (UUID uuid : lastActivity.keySet()) {
             Player player = Bukkit.getPlayer(uuid);
-            if (player == null || player.hasPermission("group.default")) {
-                players.remove(uuid);
-                afkStatus.remove(uuid);
+            if (player == null || !player.isOnline() || player.hasPermission("group.default")) {
+                toRemove.add(uuid);
                 continue;
             }
 
-            long lastActive = players.getOrDefault(uuid, System.currentTimeMillis());
-            boolean isAFK = System.currentTimeMillis() - lastActive >= MovementThreshold;
-            boolean wasAFK = afkStatus.getOrDefault(uuid, false);
+            long last = lastActivity.get(uuid);
+            boolean isAFK = now - last >= movementThreshold;
+            boolean wasAFK = afkPlayers.contains(uuid);
 
             if (isAFK && !wasAFK) {
-                afkStatus.put(uuid, true);
-                player.sendActionBar(Component.text("You're now AFK", NamedTextColor.GRAY));
-
-                //  Interact with TAB to set AFK prefix
-                TabPlayer tabPlayer = tabAPI.getPlayer(uuid);
-                if (tabPlayer != null && formatManager != null) {
-                    formatManager.setPrefix(tabPlayer, "§7[AFK] ");
-                }
+                afkPlayers.add(uuid);
+                player.sendActionBar(AFK_ENTER_MSG);
+                setTabPrefix(player, AFK_PREFIX);
 
             } else if (!isAFK && wasAFK) {
-                afkStatus.put(uuid, false);
-                player.sendActionBar(Component.text("You're no longer AFK", NamedTextColor.GRAY));
+                afkPlayers.remove(uuid);
+                player.sendActionBar(AFK_EXIT_MSG);
+                setTabPrefix(player, null);
 
-                //  Remove AFK prefix
-                TabPlayer tabPlayer = tabAPI.getPlayer(uuid);
-                if (tabPlayer != null && formatManager != null) {
-                    formatManager.setPrefix(tabPlayer, null);
-                }
             } else if (isAFK) {
-                player.sendActionBar(Component.text("You're currently AFK", NamedTextColor.GRAY));
+                player.sendActionBar(AFK_STATUS_MSG);
             }
+        }
+
+        for (UUID uuid : toRemove) {
+            lastActivity.remove(uuid);
+            afkPlayers.remove(uuid);
         }
     }
 
-    public static void playerRemove(Player player) {
+    public void recordActivity(Player player) {
         UUID uuid = player.getUniqueId();
-        players.remove(uuid);
-        afkStatus.remove(uuid);
+        lastActivity.put(uuid, System.currentTimeMillis());
+
+        if (afkPlayers.remove(uuid)) {
+            player.sendActionBar(AFK_EXIT_MSG);
+            setTabPrefix(player, null);
+        }
     }
 
-    public static void playerActive(Player player) {
+    public void removePlayer(Player player) {
         UUID uuid = player.getUniqueId();
-        players.put(uuid, System.currentTimeMillis());
+        lastActivity.remove(uuid);
+        afkPlayers.remove(uuid);
+        setTabPrefix(player, null);
+    }
 
-        if (afkStatus.getOrDefault(uuid, false)) {
-            afkStatus.put(uuid, false);
-
-            TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(uuid);
-            if (tabPlayer != null && formatManager != null) {
-                formatManager.setPrefix(tabPlayer, null);
-            }
-
-            player.sendActionBar(Component.text("You're no longer AFK", NamedTextColor.GRAY));
+    private void setTabPrefix(Player player, String prefix) {
+        TabPlayer tabPlayer = tabAPI.getPlayer(player.getUniqueId());
+        if (tabPlayer != null && formatManager != null) {
+            formatManager.setPrefix(tabPlayer, prefix);
         }
     }
 }

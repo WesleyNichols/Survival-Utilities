@@ -10,23 +10,28 @@ public class ArmorPoseUtil {
 
     public static FileConfiguration config;
 
-    public static boolean isLastPose(String pose) {
-        return !config.contains("armor.standPose." + (Integer.parseInt(pose)+1));
+    public static void setConfig(FileConfiguration configuration) {
+        config = configuration;
     }
 
-    public static void setPose(ArmorStand armorStand, String pose) {
-        List<Integer> bodyPose = getBodyPose(pose);
-        List<Integer> headPose = getHeadPose(pose);
-        List<Integer> leftLegPose = getLeftLegPose(pose);
-        List<Integer> rightLegPose = getRightLegPose(pose);
+    public static boolean isLastPose(int poseNumber) {
+        return !config.contains("armor.standPose." + (poseNumber + 1));
+    }
 
-        if (getArms(pose)) {
-            List<Integer> leftArmPose = getLeftArmPose(pose);
-            List<Integer> rightArmPose = getRightArmPose(pose);
+    public static void setPose(ArmorStand armorStand, int poseNumber) {
+        List<Integer> bodyPose = safePoseList(getBodyPose(poseNumber));
+        List<Integer> headPose = safePoseList(getHeadPose(poseNumber));
+        List<Integer> leftLegPose = safePoseList(getLeftLegPose(poseNumber));
+        List<Integer> rightLegPose = safePoseList(getRightLegPose(poseNumber));
+
+        if (getArms(poseNumber)) {
+            List<Integer> leftArmPose = safePoseList(getLeftArmPose(poseNumber));
+            List<Integer> rightArmPose = safePoseList(getRightArmPose(poseNumber));
             armorStand.setLeftArmRotations(Rotations.ofDegrees(leftArmPose.get(0), leftArmPose.get(1), leftArmPose.get(2)));
             armorStand.setRightArmRotations(Rotations.ofDegrees(rightArmPose.get(0), rightArmPose.get(1), rightArmPose.get(2)));
             armorStand.setArms(true);
         } else {
+            // Default fallback rotations
             armorStand.setLeftArmRotations(Rotations.ofDegrees(339, 0, 346));
             armorStand.setRightArmRotations(Rotations.ofDegrees(339, 0, 15));
             armorStand.setArms(false);
@@ -38,31 +43,40 @@ public class ArmorPoseUtil {
         armorStand.setRightLegRotations(Rotations.ofDegrees(rightLegPose.get(0), rightLegPose.get(1), rightLegPose.get(2)));
     }
 
-    public static boolean getArms(String pose) {
-        return !config.contains("armor.standPose." + pose + ".arms") || config.getBoolean("armor.standPose." + pose + ".arms");
+    public static boolean getArms(int poseNumber) {
+        // If "arms" key doesn't exist, default to true
+        return !config.contains("armor.standPose." + poseNumber + ".arms") ||
+                config.getBoolean("armor.standPose." + poseNumber + ".arms");
     }
 
-    public static List<Integer> getBodyPose(String pose) {
-        return config.getIntegerList("armor.standPose." + pose + ".bodyPose");
+    private static List<Integer> safePoseList(List<Integer> list) {
+        if (list == null || list.size() < 3) {
+            return List.of(0, 0, 0);
+        }
+        return list;
     }
 
-    public static List<Integer> getHeadPose(String pose) {
-        return config.getIntegerList("armor.standPose." + pose + ".headPose");
+    public static List<Integer> getBodyPose(int poseNumber) {
+        return config.getIntegerList("armor.standPose." + poseNumber + ".bodyPose");
     }
 
-    public static List<Integer> getLeftLegPose(String pose) {
-        return config.getIntegerList("armor.standPose." + pose + ".leftLegPose");
+    public static List<Integer> getHeadPose(int poseNumber) {
+        return config.getIntegerList("armor.standPose." + poseNumber + ".headPose");
     }
 
-    public static List<Integer> getRightLegPose(String pose) {
-        return config.getIntegerList("armor.standPose." + pose + ".rightLegPose");
+    public static List<Integer> getLeftLegPose(int poseNumber) {
+        return config.getIntegerList("armor.standPose." + poseNumber + ".leftLegPose");
     }
 
-    public static List<Integer> getLeftArmPose(String pose) {
-        return config.getIntegerList("armor.standPose." + pose + ".leftArmPose");
+    public static List<Integer> getRightLegPose(int poseNumber) {
+        return config.getIntegerList("armor.standPose." + poseNumber + ".rightLegPose");
     }
 
-    public static List<Integer> getRightArmPose(String pose) {
-        return config.getIntegerList("armor.standPose." + pose + ".rightArmPose");
+    public static List<Integer> getLeftArmPose(int poseNumber) {
+        return config.getIntegerList("armor.standPose." + poseNumber + ".leftArmPose");
+    }
+
+    public static List<Integer> getRightArmPose(int poseNumber) {
+        return config.getIntegerList("armor.standPose." + poseNumber + ".rightArmPose");
     }
 }

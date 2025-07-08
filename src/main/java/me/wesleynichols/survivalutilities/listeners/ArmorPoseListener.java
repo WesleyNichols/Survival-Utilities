@@ -11,40 +11,70 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
+import java.util.Optional;
+
 public class ArmorPoseListener implements Listener {
+
+    private static final String POSE_TAG_PREFIX = "pose:";
 
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
-        if(event.getEntity() instanceof ArmorStand armorStand) {
-            armorStand.addScoreboardTag("1");
+        if (event.getEntity() instanceof ArmorStand armorStand) {
+            // Initialize pose tag to "1" when armor stand spawns
+            armorStand.addScoreboardTag(POSE_TAG_PREFIX + "1");
         }
     }
 
     @EventHandler
     public void onArmorStandClick(PlayerInteractAtEntityEvent event) {
-        if (event.getRightClicked() instanceof ArmorStand armorStand) {
-            Player player = event.getPlayer();
-            if (!player.isSneaking() || !player.hasPermission("survivalutil.armorpose")) return;
+        if (!(event.getRightClicked() instanceof ArmorStand armorStand)) return;
 
-            event.setCancelled(true);
+        Player player = event.getPlayer();
 
-            String pose = armorStand.getScoreboardTags().iterator().next();
-            armorStand.removeScoreboardTag(pose);
+        // Only proceed if sneaking and has permission
+        if (!player.isSneaking() || !player.hasPermission("survivalutil.armorpose")) return;
 
-            if (ArmorPoseUtil.isLastPose(pose)) {
-                if (armorStand.getEquipment().getItemInMainHand().getType() == Material.AIR) {
-                    pose = "1";
-                } else {
-                    pose = "2";
-                }
+        event.setCancelled(true);
+
+        // Get current pose number from scoreboard tags
+        Optional<String> currentPoseTag = armorStand.getScoreboardTags()
+                .stream()
+                .filter(tag -> tag.startsWith(POSE_TAG_PREFIX))
+                .findFirst();
+
+        int currentPose = currentPoseTag
+                .map(tag -> {
+                    try {
+                        return Integer.parseInt(tag.substring(POSE_TAG_PREFIX.length()));
+                    } catch (NumberFormatException e) {
+                        return 1; // Default to pose 1 if corrupted
+                    }
+                })
+                .orElse(1);
+
+        // Remove old pose tag
+        currentPoseTag.ifPresent(armorStand::removeScoreboardTag);
+
+        // Determine next pose
+        int nextPose;
+        if (ArmorPoseUtil.isLastPose(currentPose)) {
+            // Reset based on whether hands are empty or not
+            if (armorStand.getEquipment().getItemInMainHand().getType() == Material.AIR) {
+                nextPose = 1;
             } else {
-                pose = String.valueOf(Integer.parseInt(pose) + 1);
+                nextPose = 2;
             }
-
-            armorStand.addScoreboardTag(pose);
-            ArmorPoseUtil.setPose(armorStand, pose);
-
-            player.sendActionBar(Component.text("Pose: " + pose, NamedTextColor.GOLD));
+        } else {
+            nextPose = currentPose + 1;
         }
+
+        // Add new pose tag
+        armorStand.addScoreboardTag(POSE_TAG_PREFIX + nextPose);
+
+        // Apply the pose
+        ArmorPoseUtil.setPose(armorStand, nextPose);
+
+        // Notify player
+        player.sendActionBar(Component.text("Pose: " + nextPose, NamedTextColor.GOLD));
     }
 }

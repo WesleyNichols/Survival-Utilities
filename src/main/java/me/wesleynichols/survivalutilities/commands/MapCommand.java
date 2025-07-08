@@ -1,40 +1,48 @@
 package me.wesleynichols.survivalutilities.commands;
 
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.managers.BaseCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import me.wesleynichols.survivalutilities.SurvivalUtilities;
 
-import java.util.Objects;
-
-public class MapCommand implements CommandExecutor {
+public class MapCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        //  Check if the command is disabled
-        if (!SurvivalUtilities.getInstance().isCommandEnabled("map")) {
-            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+    protected boolean executeCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(Component.text("Only players can use this command.", NamedTextColor.RED));
             return true;
         }
 
-        if (sender instanceof Player player) {
-            FileConfiguration config = SurvivalUtilities.getInstance().getConfig();
-            player.sendMessage(SurvivalUtilities.getInstance().getPrefix().append(
-                    LegacyComponentSerializer.legacyAmpersand()
-                    .deserialize(Objects.requireNonNull(config.getString("map")))
-                    .clickEvent(ClickEvent.openUrl(Objects.requireNonNull(config.getString("map-link"))))
-                    .hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacyAmpersand()
-                            .deserialize(Objects.requireNonNull(config.getString("map-hover")))))));
+        FileConfiguration config = SurvivalUtilities.getInstance().getConfig();
+        String mapText = config.getString("map");
+        String mapLink = config.getString("map-link");
+
+        if (mapText == null || mapLink == null) {
+            String missing = (mapText == null ? "map" : "") + (mapText == null && mapLink == null ? ", " : "")
+                    + (mapLink == null ? "map-link" : "");
+            player.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Map information is not configured properly: ", NamedTextColor.RED)
+                    .append(Component.text(missing, NamedTextColor.YELLOW))));
             return true;
         }
-        return false;
+
+        Component message = SurvivalUtilities.getInstance().getPrefix()
+                .append(LegacyComponentSerializer.legacyAmpersand().deserialize(mapText)
+                        .clickEvent(ClickEvent.openUrl(mapLink))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text("Redirects to " + mapLink, NamedTextColor.GRAY)))
+        );
+
+        player.sendMessage(message);
+        return true;
     }
 }

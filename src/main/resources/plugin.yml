@@ -2,13 +2,14 @@ name: SurvivalUtilities
 version: '${project.version}'
 main: me.wesleynichols.survivalutilities.SurvivalUtilities
 depend: [TAB]
-api-version: 1.19
+api-version: 1.21
 authors: [ WesleyNichols, TheSheepGoesBa ]
 description: Lightweight utilities for server members
 commands:
   accept:
     description: Accept/unaccept players as members
-    usage: /accept <player>
+    usage: /<accept|unaccept> <player>, /accept list [page]
+    aliases: [unaccept]
     permission: survivalutil.accept
   apply:
     description: Apply to join as a member
@@ -20,7 +21,7 @@ commands:
     permission: survivalutil.broadcast
   heal:
     description: Restore health and hunger of a player
-    usage: /heal <player>
+    usage: /heal <player|radius|selector>
     permission: survivalutil.heal
   help:
     description: Displays help menu
@@ -51,9 +52,5 @@ commands:
     permission: survivalutil.smite
   togglecommand:
     description: Enables or disables a provided command
-    usage: /togglecommand <command>
+    usage: /togglecommand <command> <true|false>
     permission: survivalutil.togglecommand
-  unaccept:
-    description: Accept/unaccept players as members
-    usage: /unaccept <player>
-    permission: survivalutil.unaccept

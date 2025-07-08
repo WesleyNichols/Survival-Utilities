@@ -1,63 +1,66 @@
 package me.wesleynichols.survivalutilities.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import me.wesleynichols.survivalutilities.managers.ChatManager;
 
-import static me.wesleynichols.survivalutilities.managers.ChatManager.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.UUID;
 
 public class ChatPlayer {
 
-    private int numTimesMuted;
-    List<Double> chatTimes;
-    private final UUID playerUUID;
+    private final UUID uuid;
+    private final ChatManager manager;
+    private final Queue<Double> messageTimes = new LinkedList<>();
 
-    public ChatPlayer(UUID uuid) {
-        this.numTimesMuted = 0;
-        this.chatTimes = new ArrayList<>();
-        this.playerUUID = uuid;
+    private int muteCount = 0;
+
+    public ChatPlayer(UUID uuid, ChatManager manager) {
+        this.uuid = uuid;
+        this.manager = manager;
     }
 
-    public void checkThreshold() {
-        if (chatTimes.size() < maxMessages) return; // Prevent out-of-bounds
+    public void recordMessage() {
+        double now = System.currentTimeMillis() / 1000D;
 
-        double sumDiff = 0;
-        for (int i = 0; i < maxMessages - 2; i++) {
-            sumDiff += chatTimes.get(i + 1) - chatTimes.get(i);
+        if (!messageTimes.isEmpty() && now - messageTimes.peek() > manager.getResetThreshold()) {
+            messageTimes.clear(); // Reset if expired
         }
 
-        if (sumDiff / (maxMessages - 1D) < threshold) {
-            preventChat.put(playerUUID, System.currentTimeMillis() / 1000D + muteTime + numTimesMuted);
-            numTimesMuted++;
+        messageTimes.add(now);
+
+        if (messageTimes.size() >= manager.getMaxMessages()) {
+            checkSpam();
+        }
+    }
+
+    public void checkSpam() {
+        Double[] times = messageTimes.toArray(new Double[0]);
+        double sum = 0;
+
+        for (int i = 0; i < times.length - 1; i++) {
+            sum += times[i + 1] - times[i];
+        }
+
+        double avgDelay = sum / (times.length - 1);
+        if (avgDelay < manager.getThreshold()) {
+            manager.mutePlayer(uuid, muteCount++);
+            messageTimes.clear();
         } else {
-            chatTimes = new ArrayList<>();
+            messageTimes.poll(); // Slide window
         }
     }
 
-    public boolean checkMuteTime(double timeLeft) {
-        if (timeLeft < -threshold) {
-            preventChat.remove(playerUUID);
-            numTimesMuted = 0;
-            chatTimes = new ArrayList<>();
+    public boolean handleMuteExpiration(double timeLeft) {
+        if (timeLeft < -manager.getThreshold()) {
+            manager.unmutePlayer(uuid);
+            muteCount = 0;
+            messageTimes.clear();
             return false;
-        } else if (numTimesMuted < 3 && timeLeft <= 0) {
-            preventChat.put(playerUUID, System.currentTimeMillis()/1000D + muteTime + numTimesMuted);
-            numTimesMuted++;
+        } else if (muteCount < 3 && timeLeft <= 0) {
+            manager.mutePlayer(uuid, muteCount++);
             return false;
         }
-        return true;
-    }
 
-    public void checkMessage() {
-        if (numTimesMuted > 0) return;
-        double time = System.currentTimeMillis()/1000D;
-        int size = chatTimes.size();
-        if (size > 0 && time - chatTimes.get(size - 1) > resetArrThreshold) {
-            chatTimes = new ArrayList<>();
-        }
-        chatTimes.add(time);
-        if (size == maxMessages - 1) {
-            checkThreshold();
-        }
+        return true; // Still muted
     }
 }

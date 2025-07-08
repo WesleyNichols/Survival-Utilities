@@ -1,76 +1,55 @@
 package me.wesleynichols.survivalutilities.util;
 
+import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
 public class ConfigUtil {
 
-    private static Plugin plugin;
+    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
 
-    /**
-     * Convert a config's message using legacy ampersands and filling placeholders
-     */
     public static Component formatMessage(String template, Player player) {
-        if (template == null) {
-            return Component.empty();
-        }
+        if (template == null) return Component.empty();
 
-        // Replace placeholders
         String replaced = template
                 .replace("%player%", player.getName())
                 .replace("%uuid%", player.getUniqueId().toString())
                 .replace("%world%", player.getWorld().getName());
 
-        // Parse legacy color codes with Adventure
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(replaced);
+        return LEGACY.deserialize(replaced);
     }
 
-    /**
-     * Convert a config's message using legacy ampersands
-     */
     public static Component formatMessage(String template) {
-        if (template == null) {
-            return Component.empty();
-        }
-
-        // Parse legacy color codes with Adventure
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(template);
+        if (template == null) return Component.empty();
+        return LEGACY.deserialize(template);
     }
 
-    /**
-     * Send a formatted message, reading each line in the message
-     */
-    public static void sendFormattedMessage(Object raw, Player player) {
-        if (raw instanceof List<?>) {
-            for (Object line : (List<?>) raw) {
-                if (line instanceof String str) {
-                    player.sendMessage(formatMessage(str, player));
-                }
-            }
-        } else if (raw instanceof String str) {
-            player.sendMessage(formatMessage(str, player));
+    public static void sendFormattedMessage(List<String> lines, Player player) {
+        for (String line : lines) {
+            player.sendMessage(formatMessage(line, player));
         }
     }
 
-    /**
-     * Read and play a sound using config values
-     */
-    public static void playConfigSound (ConfigurationSection soundConfig, Player player) {
+    public static void playConfigSound(ConfigurationSection soundConfig, Player player) {
+        if (soundConfig == null || player == null) return;
+
+        String sound = soundConfig.getString("sound");
+        if (sound == null || sound.isBlank()) {
+            SurvivalUtilities.getInstance().getLogger().warning("Missing or empty 'sound' in sound config.");
+            return;
+        }
+
+        float volume = (float) soundConfig.getDouble("volume", 1.0);
+        float pitch = (float) soundConfig.getDouble("pitch", 1.0);
+
         try {
-            String sound = soundConfig.getString("sound");
-            float volume = (float) soundConfig.getDouble("volume");
-            float pitch = (float) soundConfig.getDouble("pitch");
-
-            assert sound != null;
-
             player.playSound(player.getLocation(), sound, volume, pitch);
         } catch (IllegalArgumentException e) {
-            plugin.getLogger().warning("Invalid sound specified in config: " + soundConfig.getString("sound"));
+            SurvivalUtilities.getInstance().getLogger().warning("Invalid sound: " + sound);
         }
     }
 }

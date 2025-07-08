@@ -2,7 +2,6 @@ package me.wesleynichols.survivalutilities.listeners;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,104 +18,73 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 
 public class DenyInteract implements Listener {
 
-    public static void applyMessage(Player player) {
-        player.sendActionBar(Component.text("Use /apply to get started!", NamedTextColor.RED));
+    private static final String PERMISSION_NODE = "group.default";
+
+    private static boolean shouldDeny(Player player, boolean notify) {
+        if (player.hasPermission(PERMISSION_NODE)) {
+            if (notify) {
+                player.sendActionBar(Component.text("Use /apply to get started!", NamedTextColor.RED));
+            }
+            return true;
+        }
+        return false;
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("group.default")) {
-            event.setCancelled(true);
-            applyMessage(player);
-        }
+        if (shouldDeny(event.getPlayer(), true)) event.setCancelled(true);
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntityType() == EntityType.PLAYER){
-            Player player = ((Player) event.getEntity()).getPlayer();
-            assert player != null;
-            if (player.hasPermission("group.default")) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onDrop(PlayerDropItemEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("group.default")) {
+        if (event.getEntity() instanceof Player player && shouldDeny(player, false)) {
             event.setCancelled(true);
-            applyMessage(player);
         }
     }
 
     @EventHandler
     public void onEntityTarget(EntityTargetEvent event) {
-        if (event.getTarget() instanceof Player){
-            Player player = ((Player) event.getTarget()).getPlayer();
-            assert player != null;
-            if (player.hasPermission("group.default")) {
-                event.setCancelled(true);
-            }
+        if (event.getTarget() instanceof Player player && shouldDeny(player, false)) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent event) {
-        if (event.getEntityType() == EntityType.PLAYER){
-            Player player = ((Player) event.getEntity()).getPlayer();
-            assert player != null;
-            if (player.hasPermission("group.default")) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("group.default")) {
-            event.setCancelled(true);
-            applyMessage(player);
-        }
-    }
-
-    @EventHandler
-    public void onItemPickup(PlayerAttemptPickupItemEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("group.default")) {
+        if (event.getEntity() instanceof Player player && shouldDeny(player, false)) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onArrowPickup(PlayerPickupArrowEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("group.default")) {
-            event.setCancelled(true);
-        }
+    public void onDrop(PlayerDropItemEvent event) {
+        if (shouldDeny(event.getPlayer(), true)) event.setCancelled(true);
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        if (player.hasPermission("group.default")) {
-            event.setCancelled(true);
-            applyMessage(player);
-        }
+        if (shouldDeny(event.getPlayer(), true)) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onItemPickup(PlayerAttemptPickupItemEvent event) {
+        if (shouldDeny(event.getPlayer(), false)) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onArrowPickup(PlayerPickupArrowEvent event) {
+        if (shouldDeny(event.getPlayer(), false)) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (shouldDeny(event.getPlayer(), true)) event.setCancelled(true);
     }
 
     @EventHandler
     public void preventDamage(EntityDamageByEntityEvent event) {
-        if (event.getDamager().getType() == EntityType.PLAYER){
-            Player player = ((Player) event.getDamager()).getPlayer();
-            assert player != null;
-            if (player.hasPermission("group.default")) {
-                event.setCancelled(true);
-                applyMessage(player);
-            }
+        if (event.getDamager() instanceof Player player && shouldDeny(player, true)) {
+            event.setCancelled(true);
         }
     }
 }

@@ -1,27 +1,26 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.managers.BaseCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SmiteCommand implements CommandExecutor {
+public class SmiteCommand extends BaseCommand {
 
-    /**
-     * Smites (kills) a player with lightning (visual only)
-     */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        //  Check if the command is disabled
-        if (!SurvivalUtilities.getInstance().isCommandEnabled("smite")) {
-            sender.sendMessage(Component.text("This command is currently disabled.", NamedTextColor.RED));
+    protected boolean executeCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        // Restrict sender to Player or Console - no repeating Command Block smiting here
+        if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender)) {
+            sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Only players or the console can use this command.", NamedTextColor.RED)));
             return true;
         }
 
@@ -30,29 +29,39 @@ public class SmiteCommand implements CommandExecutor {
         if (args.length == 1) {
             target = Bukkit.getPlayerExact(args[0]);
             if (target == null) {
-                sender.sendMessage(Component.text(args[0] + " is not a valid target!", NamedTextColor.DARK_RED));
+                sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                        .append(Component.text(args[0] + " is not a valid target!", NamedTextColor.DARK_RED)));
                 return true;
             }
         } else if (sender instanceof Player player) {
             target = player;
         } else {
-            sender.sendMessage(Component.text("You must specify a target when using this command from console.", NamedTextColor.RED));
+            sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("You must specify a target when using this command from console.", NamedTextColor.RED)));
             return true;
         }
 
         Location loc = target.getLocation();
         World world = loc.getWorld();
 
-        // Show lightning effect
+        if (world == null) {
+            sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text("Target's world is not loaded.", NamedTextColor.RED)));
+            return true;
+        }
+
         world.strikeLightningEffect(loc); // visual only
 
-        sender.sendMessage(Component.text("You smite ", NamedTextColor.GOLD)
+        sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                .append(Component.text("You smite ", NamedTextColor.GOLD))
                 .append(Component.text(target.getName(), NamedTextColor.YELLOW))
                 .append(Component.text("!", NamedTextColor.GOLD)));
-        target.sendMessage(Component.text("A divine force descends to smite you!", NamedTextColor.DARK_PURPLE));
 
-        // Kill the player
+        target.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                .append(Component.text("A divine force descends to smite you!", NamedTextColor.DARK_PURPLE)));
+
         target.setHealth(0);
         return true;
     }
+
 }
