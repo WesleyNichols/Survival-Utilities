@@ -52,7 +52,8 @@ public class AcceptCommand extends BaseCommand {
         // Is provided player real
         String mojangId = mojang.getUUIDOfUsername(username);
         if (mojangId == null || mojangId.isEmpty()) {
-            sender.sendMessage(Component.text(username + " is not a valid user!", NamedTextColor.RED));
+            sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                    .append(Component.text(username + " is not a valid user!", NamedTextColor.RED)));
             return true;
         }
 
