@@ -130,7 +130,10 @@ public class PlayerManager implements Listener {
 
     public boolean playerUnaccept(OfflinePlayer player) {
         try {
-            luckPerms.getUserManager().modifyUser(player.getUniqueId(), user -> user.data().clear());
+            luckPerms.getUserManager().modifyUser(player.getUniqueId(), user -> {
+                user.data().remove(Node.builder("group.player").build());
+                user.data().add(Node.builder("group.default").build());
+            });
             config.set(player.getUniqueId().toString(), null);
             customConfig.saveConfig();
             plugin.getLogger().info("Unaccepted player " + player.getName());
