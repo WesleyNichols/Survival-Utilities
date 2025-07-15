@@ -46,17 +46,17 @@ public class AcceptCommand extends BaseCommand {
             return true;
         }
 
-        // /accept <player>
+        // /<accept|unaccept> <player>
         String username = args[0];
-        OfflinePlayer target = Bukkit.getOfflinePlayer(username);
 
-        try {
-            mojang.getUUIDOfUsername(username); // validate player exists
-        } catch (Exception e) {
-            sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
-                    .append(Component.text(username + " is not a valid user!", NamedTextColor.RED)));
+        // Is provided player real
+        String mojangId = mojang.getUUIDOfUsername(username);
+        if (mojangId == null || mojangId.isEmpty()) {
+            sender.sendMessage(Component.text(username + " is not a valid user!", NamedTextColor.RED));
             return true;
         }
+
+        OfflinePlayer target = Bukkit.getOfflinePlayer(username);
 
         boolean isAccepting = label.equalsIgnoreCase("accept");
         boolean isAccepted = playerManager.hasBeenAccepted(target);
