@@ -120,6 +120,7 @@ public class HealCommand extends BaseCommand {
         if (entity instanceof Player player) {
             player.setFoodLevel(20);
             player.setSaturation(20);
+            player.setFireTicks(0);
         }
     }
 
