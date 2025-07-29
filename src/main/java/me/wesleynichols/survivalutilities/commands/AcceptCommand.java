@@ -1,9 +1,11 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
+import me.wesleynichols.survivalutilities.commands.template.BaseCommand;
+import me.wesleynichols.survivalutilities.configs.PlayerConfig;
 import me.wesleynichols.survivalutilities.managers.PageManager;
 import me.wesleynichols.survivalutilities.managers.PlayerManager;
-import me.wesleynichols.survivalutilities.structures.BaseCommand;
+import me.wesleynichols.survivalutilities.model.PlayerStatus;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -12,13 +14,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.shanerx.mojang.Mojang;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AcceptCommand extends BaseCommand {
 
@@ -27,9 +29,10 @@ public class AcceptCommand extends BaseCommand {
 
     @Override
     protected boolean executeCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        PlayerConfig playerConfig = SurvivalUtilities.getInstance().getPlayerConfig();
         PlayerManager playerManager = SurvivalUtilities.getInstance().getPlayerManager();
 
-        //  /accept list
+        // /accept list
         if (args.length > 0 && args[0].equalsIgnoreCase("list")) {
             int page = 1;
             if (args.length > 1) {
@@ -41,7 +44,7 @@ public class AcceptCommand extends BaseCommand {
                 }
             }
 
-            List<Component> listPage = getAcceptedPlayerPage(playerManager, page);
+            List<Component> listPage = getAcceptedPlayerPage(playerConfig, page);
             listPage.forEach(sender::sendMessage);
             return true;
         }
@@ -49,7 +52,7 @@ public class AcceptCommand extends BaseCommand {
         // /<accept|unaccept> <player>
         String username = args[0];
 
-        // Is provided player real
+        // Validate UUID's existence from Mojang API
         String mojangId = mojang.getUUIDOfUsername(username);
         if (mojangId == null || mojangId.isEmpty()) {
             sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
@@ -60,7 +63,7 @@ public class AcceptCommand extends BaseCommand {
         OfflinePlayer target = Bukkit.getOfflinePlayer(username);
 
         boolean isAccepting = label.equalsIgnoreCase("accept");
-        boolean isAccepted = playerManager.hasBeenAccepted(target);
+        boolean isAccepted = playerConfig.hasStatus(target.getUniqueId());
 
         if (isAccepting) {
             if (isAccepted) {
@@ -92,29 +95,34 @@ public class AcceptCommand extends BaseCommand {
         }
     }
 
-    private List<Component> getAcceptedPlayerPage(PlayerManager playerManager, int page) {
+    private List<Component> getAcceptedPlayerPage(PlayerConfig playerConfig, int page) {
         List<Component> entries = new ArrayList<>();
 
-        FileConfiguration config = playerManager.getConfig();
-        for (String uuidStr : config.getKeys(false)) {
-            List<?> data = config.getList(uuidStr);
-            if (data != null && data.size() >= 2) {
-                Object nameObj = data.get(0);
-                Object statusObj = data.get(1);
-
-                if (nameObj instanceof String name && statusObj instanceof Integer status && (status == 0 || status == 1)) {
-                    Component entry = Component.text(name, NamedTextColor.YELLOW)
-                            .append(Component.text(" (" + uuidStr + ")", NamedTextColor.GRAY));
-
-                    if (status == 0) { // pending
-                        entry = entry.decorate(TextDecoration.ITALIC);
-                    }
-
-                    entries.add(entry);
-                }
+        for (String uuidStr : playerConfig.getAllPlayerUUIDs()) {
+            UUID uuid;
+            try {
+                uuid = UUID.fromString(uuidStr);
+            } catch (IllegalArgumentException e) {
+                continue; // Skip invalid UUIDs
             }
+
+            PlayerStatus status = playerConfig.getStatus(uuid);
+            if (status == null) continue;
+
+            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+            String name = player.getName() != null ? player.getName() : uuidStr;
+
+            Component entry = Component.text(name, NamedTextColor.YELLOW)
+                    .append(Component.text(" (" + uuidStr + ")", NamedTextColor.GRAY));
+
+            if (status == PlayerStatus.PENDING) {
+                entry = entry.decorate(TextDecoration.ITALIC);
+            }
+
+            entries.add(entry);
         }
 
+        // Sort alphabetically by plain text
         entries.sort((c1, c2) ->
                 PLAIN_TEXT.serialize(c1).compareToIgnoreCase(PLAIN_TEXT.serialize(c2))
         );

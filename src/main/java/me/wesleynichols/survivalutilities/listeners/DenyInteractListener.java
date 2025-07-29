@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 
-public class DenyInteract implements Listener {
+public class DenyInteractListener implements Listener {
 
     private static final String PERMISSION_NODE = "group.default";
 

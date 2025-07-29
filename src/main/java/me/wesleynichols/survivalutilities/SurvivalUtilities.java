@@ -1,30 +1,31 @@
 package me.wesleynichols.survivalutilities;
 
+import me.wesleynichols.survivalutilities.chat.ChatManager;
 import me.wesleynichols.survivalutilities.commands.*;
-import me.wesleynichols.survivalutilities.config.CustomConfig;
+import me.wesleynichols.survivalutilities.configs.ConfigUtil;
+import me.wesleynichols.survivalutilities.configs.PlayerConfig;
 import me.wesleynichols.survivalutilities.listeners.AFKListener;
-import me.wesleynichols.survivalutilities.listeners.ArmorPoseListener;
-import me.wesleynichols.survivalutilities.listeners.DenyInteract;
+import me.wesleynichols.survivalutilities.listeners.ArmorStandListener;
+import me.wesleynichols.survivalutilities.listeners.DenyInteractListener;
 import me.wesleynichols.survivalutilities.managers.AFKManager;
-import me.wesleynichols.survivalutilities.managers.ChatManager;
 import me.wesleynichols.survivalutilities.managers.PlayerManager;
-import me.wesleynichols.survivalutilities.util.ArmorPoseUtil;
-import me.wesleynichols.survivalutilities.util.ConfigUtil;
+import me.wesleynichols.survivalutilities.pose.ArmorPoseLoader;
+import me.wesleynichols.survivalutilities.pose.ArmorPoseManager;
+import me.wesleynichols.survivalutilities.model.ArmorStandPose;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Map;
 import java.util.Objects;
 
 public final class SurvivalUtilities extends JavaPlugin {
 
     private static SurvivalUtilities plugin;
 
-    private CustomConfig playerConfig;
-    private CustomConfig armorStandConfig;
+    private PlayerConfig playerConfig;
 
     private PlayerManager playerManager;
     private ChatManager chatManager;
@@ -39,30 +40,24 @@ public final class SurvivalUtilities extends JavaPlugin {
         plugin = this;
 
         saveDefaultConfig();
+        loadArmorStandPoses();
 
-        // Initialize custom configs
-        playerConfig = new CustomConfig("player.yml");
-        armorStandConfig = new CustomConfig("armor_stand.yml");
-
+        playerConfig = new PlayerConfig(this);
         playerManager = new PlayerManager(this, playerConfig);
-        ArmorPoseUtil.setConfig(armorStandConfig.getConfig());
 
         chatManager = new ChatManager(this);
         afkManager = new AFKManager(this);
-
         afkManager.runTaskTimer(this, 0L, 40L);
 
         // Register events
         registerEvent(playerManager);
-        registerEvent(new DenyInteract());
+        registerEvent(new DenyInteractListener());
         registerEvent(new AFKListener(afkManager));
         registerEvent(chatManager);
-        registerEvent(new ArmorPoseListener());
+        registerEvent(new ArmorStandListener());
 
-        // Initialize chat spam tracking for online players
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            chatManager.getOrCreatePlayer(player.getUniqueId());
-        }
+        // Initialize chat tracking
+        Bukkit.getOnlinePlayers().forEach(player -> chatManager.getOrCreatePlayer(player.getUniqueId()));
 
         // Register commands
         registerCommand("accept", new AcceptCommand());
@@ -77,17 +72,21 @@ public final class SurvivalUtilities extends JavaPlugin {
         registerCommand("rules", new RulesCommand());
         registerCommand("slime", new SlimeCommand());
         registerCommand("smite", new SmiteCommand());
-        registerCommand("togglecommand", new ToggleCommandCommand());
+        registerCommand("togglecommand", new ToggleCommand());
+
+        getLogger().info("SurvivalUtilities enabled.");
     }
 
     public void reloadConfigs() {
-        playerConfig.reloadConfig();
-        armorStandConfig.reloadConfig();
-        reloadConfig();
+        playerConfig.reload();
+        reloadConfig(); // default config
+        loadArmorStandPoses();
 
         if (playerManager != null) playerManager.reload();
         if (chatManager != null) chatManager.reload();
         if (afkManager != null) afkManager.reload();
+
+        getLogger().info("SurvivalUtilities configuration reloaded.");
     }
 
     public void registerEvent(Listener event) {
@@ -99,20 +98,24 @@ public final class SurvivalUtilities extends JavaPlugin {
     }
 
     public boolean isCommandEnabled(String command) {
-        return getConfig().getBoolean("enabled-commands." + command, true); // Default to true
+        return getConfig().getBoolean("enabled-commands." + command, true);
+    }
+
+    private void loadArmorStandPoses() {
+        Map<Integer, ArmorStandPose> loadedPoses = ArmorPoseLoader.loadPoses(getConfig());
+        ArmorPoseManager.setPoses(loadedPoses);
     }
 
     public TextComponent getPrefix() {
-        String rawPrefix = getConfig().getString("chat-prefix");
-
-        if (rawPrefix == null || rawPrefix.trim().isEmpty()) {
-            rawPrefix = "&7[SurvivalUtilities] ";
-        }
-
+        String rawPrefix = getConfig().getString("chat-prefix", "&7[SurvivalUtilities] ");
         return (TextComponent) ConfigUtil.formatMessage(rawPrefix);
     }
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public PlayerConfig getPlayerConfig() {
+        return playerConfig;
     }
 }

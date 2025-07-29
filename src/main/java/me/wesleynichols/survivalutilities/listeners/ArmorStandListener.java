@@ -1,6 +1,6 @@
 package me.wesleynichols.survivalutilities.listeners;
 
-import me.wesleynichols.survivalutilities.util.ArmorPoseUtil;
+import me.wesleynichols.survivalutilities.pose.ArmorPoseManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
 import java.util.Optional;
 
-public class ArmorPoseListener implements Listener {
+public class ArmorStandListener implements Listener {
 
     private static final String POSE_TAG_PREFIX = "pose:";
 
@@ -57,13 +57,9 @@ public class ArmorPoseListener implements Listener {
 
         // Determine next pose
         int nextPose;
-        if (ArmorPoseUtil.isLastPose(currentPose)) {
+        if (ArmorPoseManager.isLastPose(currentPose)) {
             // Reset based on whether hands are empty or not
-            if (armorStand.getEquipment().getItemInMainHand().getType() == Material.AIR) {
-                nextPose = 1;
-            } else {
-                nextPose = 2;
-            }
+            nextPose = armorStand.getEquipment().getItemInMainHand().getType() == Material.AIR ? 1 : 2;
         } else {
             nextPose = currentPose + 1;
         }
@@ -72,7 +68,7 @@ public class ArmorPoseListener implements Listener {
         armorStand.addScoreboardTag(POSE_TAG_PREFIX + nextPose);
 
         // Apply the pose
-        ArmorPoseUtil.setPose(armorStand, nextPose);
+        ArmorPoseManager.setPose(armorStand, nextPose);
 
         // Notify player
         player.sendActionBar(Component.text("Pose: " + nextPose, NamedTextColor.GOLD));

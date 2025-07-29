@@ -1,7 +1,7 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
-import me.wesleynichols.survivalutilities.structures.BaseCommand;
+import me.wesleynichols.survivalutilities.commands.template.BaseCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class ToggleCommandCommand extends BaseCommand {
+public class ToggleCommand extends BaseCommand {
 
     @Override
     protected boolean executeCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {

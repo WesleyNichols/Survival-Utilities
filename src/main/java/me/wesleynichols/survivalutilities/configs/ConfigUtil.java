@@ -1,4 +1,4 @@
-package me.wesleynichols.survivalutilities.util;
+package me.wesleynichols.survivalutilities.configs;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;

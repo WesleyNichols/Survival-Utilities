@@ -1,8 +1,8 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
-import me.wesleynichols.survivalutilities.structures.BaseCommand;
-import me.wesleynichols.survivalutilities.util.ConfigUtil;
+import me.wesleynichols.survivalutilities.commands.template.BaseCommand;
+import me.wesleynichols.survivalutilities.configs.ConfigUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;

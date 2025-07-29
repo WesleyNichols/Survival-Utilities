@@ -1,6 +1,4 @@
-package me.wesleynichols.survivalutilities.util;
-
-import me.wesleynichols.survivalutilities.managers.ChatManager;
+package me.wesleynichols.survivalutilities.chat;
 
 import java.util.LinkedList;
 import java.util.Queue;

@@ -1,7 +1,7 @@
 package me.wesleynichols.survivalutilities.commands;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
-import me.wesleynichols.survivalutilities.structures.BaseCommand;
+import me.wesleynichols.survivalutilities.commands.template.BaseCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;

@@ -1,4 +1,4 @@
-package me.wesleynichols.survivalutilities.structures;
+package me.wesleynichols.survivalutilities.commands.template;
 
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
 import net.kyori.adventure.text.Component;

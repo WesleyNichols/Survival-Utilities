@@ -1,8 +1,7 @@
-package me.wesleynichols.survivalutilities.managers;
+package me.wesleynichols.survivalutilities.chat;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.wesleynichols.survivalutilities.SurvivalUtilities;
-import me.wesleynichols.survivalutilities.util.ChatPlayer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -100,7 +99,7 @@ public class ChatManager implements Listener {
         }
     }
 
-    // Getters for ChatPlayer
+    // Getters
     public double getThreshold() { return threshold; }
     public double getResetThreshold() { return resetThreshold; }
     public int getMaxMessages() { return maxMessages; }
