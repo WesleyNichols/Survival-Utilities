@@ -53,11 +53,16 @@ public class AcceptCommand extends BaseCommand {
         String username = args[0];
 
         // Validate UUID's existence from Mojang API
-        String mojangId = mojang.getUUIDOfUsername(username);
-        if (mojangId == null || mojangId.isEmpty()) {
+        if (!username.startsWith(".")) {
+            String mojangId = mojang.getUUIDOfUsername(username);
+            if (mojangId == null || mojangId.isEmpty()) {
+                sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
+                        .append(Component.text(username + " is not a valid user!", NamedTextColor.RED)));
+                return true;
+            }
+        } else {
             sender.sendMessage(SurvivalUtilities.getInstance().getPrefix()
-                    .append(Component.text(username + " is not a valid user!", NamedTextColor.RED)));
-            return true;
+                    .append(Component.text("Detected Bedrock username: " + username, NamedTextColor.YELLOW)));
         }
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(username);
